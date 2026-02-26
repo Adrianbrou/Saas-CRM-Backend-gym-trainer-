@@ -1,6 +1,6 @@
 # Gym CRM — Task Tracker
 
-## PHASE 1 — Database Layer
+## PHASE 1 — Database Layer ✅ COMPLETE
 
 ### Setup
 - [x] Fix engine.py — remove SQLite-only `check_same_thread`
@@ -16,26 +16,26 @@
 - [x] `models/workout.py` — BodyPart + Workout (one-to-many)
 - [x] `models/workout_session.py` — WorkoutSession + Attendance + SessionWorkouts
 - [x] `models/progress.py` — Progress (weight/sets/reps per member per workout)
+- [x] `models/__init__.py` — imports all models so Alembic can find them
 - [x] Delete `models/trainer.py` (empty, replaced by Staff)
 - [x] Delete `models/personal_training.py` (empty, wrong concept)
 
-### Migrations
-- [x] Create `models/__init__.py` — import all models so Alembic can find them
-- [ ] Initialize Alembic (`alembic init migrations`)
-- [ ] Configure `migrations/env.py` — point to Base and DATABASE_URL
-- [ ] Run first migration (`alembic revision --autogenerate -m "initial tables"`)
-- [ ] Apply migration (`alembic upgrade head`)
-- [ ] Verify all tables exist in PostgreSQL
+### Alembic Migrations
+- [x] Initialize Alembic (`alembic init migrations`)
+- [x] Configure `migrations/env.py` — sys.path fix, Base.metadata, DATABASE_URL from .env
+- [x] Run first migration (`alembic revision --autogenerate -m "initial tables"`)
+- [x] Apply migration (`alembic upgrade head`)
+- [x] Verify all 9 tables exist in PostgreSQL
 
 ---
 
-## PHASE 2 — Repository Layer
+## PHASE 2 — Repository Layer 🔄 IN PROGRESS
 
-- [ ] `repository/gym_repository.py` — create, get_by_id, get_all, update, delete
+- [ ] `repository/gym_repository.py` — create ✅, get_by_id ✅, get_all ✅, update ✅, delete ⬜
 - [ ] `repository/member_repository.py`
 - [ ] `repository/staff_repository.py`
 - [ ] `repository/workout_repository.py`
-- [ ] `repository/session_repository.py`
+- [ ] `repository/workout_session_repository.py`
 - [ ] `repository/progress_repository.py`
 
 ---
@@ -45,9 +45,9 @@
 - [ ] `schemas/gym.py` — GymCreate, GymUpdate, GymResponse
 - [ ] `schemas/member.py` — MemberCreate, MemberUpdate, MemberResponse
 - [ ] `schemas/staff.py` — StaffCreate, StaffUpdate, StaffResponse
-- [ ] `schemas/workout.py`
-- [ ] `schemas/session.py`
-- [ ] `schemas/progress.py`
+- [ ] `schemas/workout.py` — WorkoutCreate, WorkoutUpdate, WorkoutResponse
+- [ ] `schemas/workout_session.py` — SessionCreate, SessionResponse
+- [ ] `schemas/progress.py` — ProgressCreate, ProgressResponse
 
 ---
 
@@ -56,7 +56,7 @@
 - [ ] `services/gym_service.py` — register_gym
 - [ ] `services/member_service.py` — register_member (check unique email per gym)
 - [ ] `services/staff_service.py` — register_staff
-- [ ] `services/session_service.py` — create_session, add_member, log_workout
+- [ ] `services/workout_session_service.py` — create_session, add_member, log_workout
 - [ ] `services/progress_service.py` — log_progress
 
 ---
