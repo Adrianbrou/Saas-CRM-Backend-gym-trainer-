@@ -1,0 +1,39 @@
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime, func
+from app.database.base import Base
+from sqlalchemy.orm import relationship
+
+
+class Member(Base):
+    """
+    create 
+
+
+    """
+
+    # create the table name
+    __tablename__ = "members"
+
+    # members id
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, index=True)
+    email = Column(String, nullable=False, index=True, unique=True)
+    phone = Column(String, nullable=True, unique=True)
+
+    # create the foreign key from the gym table
+    gym_id = Column(Integer,
+                    ForeignKey("gyms.id", ondelete="CASCADE"),
+                    nullable=False)
+
+    # Timestamps
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # relationship
+    """_summary_: the "Gym" is the class name, and "members" is the relationship name in the "Gym" class
+        Child table : no cascade
+    """
+    gym = relationship(
+        "Gym", back_populates="members")
+    # From progress(child) :-> Member(parents):
+    progress_logs = relationship(
+        "Progress", back_populates="member", cascade="all, delete")

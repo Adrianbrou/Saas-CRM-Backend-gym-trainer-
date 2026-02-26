@@ -1,0 +1,35 @@
+from app.database.base import Base
+from sqlalchemy import Column, Integer, func, DateTime, String, ForeignKey, Enum
+from sqlalchemy.orm import relationship
+
+import enum
+
+
+class RoleEnum(str, enum.Enum):
+    manager = "manager"
+    trainer = "trainer"
+
+
+class Staff(Base):
+
+    __tablename__ = "staff"
+
+    id = Column(Integer, primary_key=True, nullable=False, index=True)
+    role = Column(Enum(RoleEnum), nullable=False)
+    name = Column(String, nullable=False, index=True, unique=True)
+    email = Column(String, nullable=False, index=True, unique=True)
+    phone = Column(String, nullable=False, index=True, unique=True)
+
+    # foreign key from the gym
+    gym_id = Column(Integer,
+                    ForeignKey("gyms.id", ondelete="CASCADE"),
+                    nullable=False)
+
+    # Timestamps
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
+    # relationships: 1 gym, 2 members
+    gym = relationship("Gym", back_populates="staff")
+    sessions = relationship(
+        "WorkoutSession", back_populates="staff", cascade="all, delete")
