@@ -9,8 +9,8 @@ from typing import List
 def create(db: Session, gym: Gym) -> Gym:
     """create funtion (gym): create a function to add more gym to the database 
 
+    args: he function takes 2 parameters
     Session : The Session class we need for type hints correct 
-    the function takes 2 parameters
     gym: the Gym model from models
     """
     db.add(gym)  # tells SQLAlchemy to track this new object
@@ -23,7 +23,7 @@ def create(db: Session, gym: Gym) -> Gym:
 
 
 def get_by_id(db: Session, gym_id: int) -> Gym | None:
-    """_summary_ :fetches a single gym by its id
+    """fetches a single gym by its id
 
     db.query(Gym) → "I want to query the gyms table"
     .filter(Gym.id == gym_id) → "WHERE id = gym_id"
@@ -82,3 +82,23 @@ def update(db: Session, gym_id: int, updates: dict) -> Gym | None:
     db.refresh(gym)
 
     return gym
+
+
+def delete(db: Session, gym_id: int) -> bool:
+    """Deleting a gym based on it's id 
+
+    Args:
+        db (Session): _description_
+        gym_id (int): _description_
+
+    Returns:
+        bool: The response of the deleting action, if it happened ->True else -> False
+    """
+
+    gym = get_by_id(db, gym_id)
+    if not gym:
+        return False
+    db.delete(gym)
+    db.commit()
+
+    return True
