@@ -42,7 +42,7 @@
 
 ## PHASE 3 — Schemas (Pydantic)
 
-- [ ] `schemas/gym.py` — GymCreate, GymUpdate, GymResponse
+- [x] `schemas/gym.py` — GymCreate, GymUpdate, GymResponse
 - [ ] `schemas/member.py` — MemberCreate, MemberUpdate, MemberResponse
 - [ ] `schemas/staff.py` — StaffCreate, StaffUpdate, StaffResponse
 - [ ] `schemas/workout.py` — WorkoutCreate, WorkoutUpdate, WorkoutResponse
