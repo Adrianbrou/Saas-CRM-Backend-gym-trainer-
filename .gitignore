@@ -1,10 +1,35 @@
+# =============================================================
+# SECRETS — never commit credentials or environment config
+# =============================================================
 .env
+.env.*
+
+# =============================================================
+# PYTHON — compiled files and cache (auto-generated, not needed)
+# =============================================================
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+*.pyc
+
+# =============================================================
+# VIRTUAL ENVIRONMENT — each developer has their own
+# =============================================================
 .venv/
+venv/
+env/
+
+# =============================================================
+# EDITOR / IDE — personal workspace settings, not project files
+# =============================================================
 .vscode/
+.idea/
+
+# =============================================================
+# PERSONAL / LOCAL FILES — notes and tools not part of the codebase
+# =============================================================
 Gym.txt
 step.md
 PROJECT_STRUCTURE.md
-.claude
+.claude/
