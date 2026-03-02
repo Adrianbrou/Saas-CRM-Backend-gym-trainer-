@@ -29,14 +29,14 @@
 
 ---
 
-## PHASE 2 — Repository Layer 🔄 IN PROGRESS
+## PHASE 2 — Repository Layer ✅ COMPLETE
 
 - [x] `repository/gym_repository.py` — create, get_by_id, get_all, update, delete
 - [x] `repository/member_repository.py` — + get_by_email, get_all filters by gym_id
 - [x] `repository/staff_repository.py` — + get_by_email, get_all filters by gym_id
-- [ ] `repository/workout_repository.py`
-- [ ] `repository/workout_session_repository.py`
-- [ ] `repository/progress_repository.py`
+- [x] `repository/workout_repository.py` — + get_by_body_part, no gym_id filter
+- [x] `repository/workout_session_repository.py` — + get_by_trainer, filters by gym_id
+- [x] `repository/progress_repository.py` — + get_by_member, get_by_workout, get_by_session_id
 
 ---
 

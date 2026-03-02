@@ -1,6 +1,6 @@
 from app.database.base import Base
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, DateTime, func, String, Integer, ForeignKey
+from sqlalchemy import Column, DateTime, func, Integer, ForeignKey
 
 
 class WorkoutSession(Base):
