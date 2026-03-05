@@ -46,3 +46,4 @@ class MemberResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     model_config = {"from_attributes": True}
+    # "finish"
