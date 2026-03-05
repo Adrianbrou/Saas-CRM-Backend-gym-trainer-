@@ -2,19 +2,6 @@
 gym.py — Pydantic Schemas for Gym
 
 =============================================================
-WHAT IS PYDANTIC?
-=============================================================
-Pydantic is a data validation library. It lets you define
-the exact shape of data coming IN to your API and going OUT
-from your API using Python classes with type annotations.
-
-When a request arrives, FastAPI automatically uses your
-Pydantic schema to:
-  - Validate the incoming data (correct types, required fields)
-  - Return a clear error to the client if data is invalid
-  - Parse the data into a Python object you can work with
-
-=============================================================
 THE THREE SCHEMA TYPES (pattern used throughout this project)
 =============================================================
 
