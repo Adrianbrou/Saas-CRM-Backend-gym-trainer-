@@ -40,14 +40,14 @@
 
 ---
 
-## PHASE 3 — Schemas (Pydantic)
+## PHASE 3 — Schemas (Pydantic) ✅ COMPLETE
 
 - [x] `schemas/gym.py` — GymCreate, GymUpdate, GymResponse
-- [ ] `schemas/member.py` — MemberCreate, MemberUpdate, MemberResponse
-- [ ] `schemas/staff.py` — StaffCreate, StaffUpdate, StaffResponse
-- [ ] `schemas/workout.py` — WorkoutCreate, WorkoutUpdate, WorkoutResponse
-- [ ] `schemas/workout_session.py` — SessionCreate, SessionResponse
-- [ ] `schemas/progress.py` — ProgressCreate, ProgressResponse
+- [x] `schemas/member.py` — MemberCreate, MemberUpdate, MemberResponse
+- [x] `schemas/staff.py` — StaffCreate, StaffUpdate, StaffResponse + RoleEnum
+- [x] `schemas/workout.py` — WorkoutCreate/Update/Response + BodyPartCreate/Update/Response
+- [x] `schemas/workout_session.py` — WorkoutSessionCreate/Update/Response + Attendance + SessionWorkouts
+- [x] `schemas/progress.py` — ProgressCreate, ProgressUpdate, ProgressResponse
 
 ---
 
