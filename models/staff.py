@@ -8,6 +8,9 @@ import enum
 class RoleEnum(str, enum.Enum):
     manager = "manager"
     trainer = "trainer"
+    # office = "office"
+    # receptionist = "receptionist"
+    # admin = "admin"
 
 
 class Staff(Base):
