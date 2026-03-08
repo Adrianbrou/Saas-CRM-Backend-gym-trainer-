@@ -38,6 +38,12 @@ def get_by_id(db: Session, gym_id: int) -> Gym | None:
     """
     return db.query(Gym).filter(Gym.id == gym_id).first()
 
+# get the gym by name first to help the service layer verify if a gym exist before creating it or not:
+
+
+def get_by_name(db: Session, name: str) -> Gym | None:
+    return db.query(Gym).filter(Gym.name == name).first()
+
 # fetch all gyms
 
 
