@@ -6,7 +6,7 @@ Handles all direct database operations — no business logic lives here.
 Sessions are tenant-scoped: all queries that return multiple records filter by gym_id.
 """
 
-from app.models.workout_session import WorkoutSession
+from app.models.workout_session import WorkoutSession, Attendance
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -128,5 +128,27 @@ def delete(db: Session, workout_session_id: int) -> bool:
         return False
 
     db.delete(workout_session)
+    db.commit()
+    return True
+
+
+def remove_attendance(db: Session, session_id: int, member_id: int) -> bool:
+    """Remove a member from a workout session by deleting their Attendance record.
+
+    Args:
+        db: SQLAlchemy session injected by the caller.
+        session_id: Primary key of the WorkoutSession.
+        member_id: Primary key of the Member to remove.
+
+    Returns:
+        True if the record was found and deleted, False if not found.
+    """
+    attendance = db.query(Attendance).filter(
+        Attendance.workout_session_id == session_id,
+        Attendance.member_id == member_id
+    ).first()
+    if not attendance:
+        return False
+    db.delete(attendance)
     db.commit()
     return True

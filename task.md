@@ -51,13 +51,14 @@
 
 ---
 
-## PHASE 4 — Service Layer
+## PHASE 4 — Service Layer ✅ COMPLETE
 
-- [ ] `services/gym_service.py` — register_gym
-- [ ] `services/member_service.py` — register_member (check unique email per gym)
-- [ ] `services/staff_service.py` — register_staff
-- [ ] `services/workout_session_service.py` — create_session, add_member, log_workout
-- [ ] `services/progress_service.py` — log_progress
+- [x] `services/gym_service.py` — register_gym, update_gym, get_gym, delete_gym
+- [x] `services/member_service.py` — register_member, update_member, get_member, delete_member
+- [x] `services/staff_service.py` — register_staff, update_staff, get_staff, delete_staff
+- [x] `services/workout_service.py` — create_workout, get_workout, update_workout, delete_workout
+- [x] `services/workout_session_service.py` — create_session, add_member_to_session, remove_member_from_session
+- [ ] `services/progress_service.py` — log_progress (next session)
 
 ---
 
