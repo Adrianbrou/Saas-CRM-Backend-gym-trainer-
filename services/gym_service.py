@@ -99,3 +99,42 @@ def update_gym(db: Session, gym_id: int, data: GymUpdate) -> Gym:
 
     # Step 3: Delegate the actual DB update to the repository
     return gym_repository.update(db, gym_id, updates)
+
+
+def get_gym(db: Session, gym_id: int) -> Gym:
+    """this function is the retrieve the gym information (id) from the db , the service layer check if this gym exist
+        if yes authorize the retrieval, if not raise a value Error
+    Args:
+        db (Session): Session to the database 
+        gym_id (int): the id to check for get the info
+
+    Raises:
+        ValueError: check if gym exist or not
+
+    Returns:
+        Gym: if existing return the gym info through it's id
+    """
+    existing = gym_repository.get_by_id(db, gym_id)
+    if not existing:
+        raise ValueError("Gym not found")
+    return existing
+
+
+def delete_gym(db: Session, gym_id: int) -> bool:
+    """Delete a gym after verifying it exists.
+
+    Args:
+        db (Session): Session to the database.
+        gym_id (int): The id of the gym to delete.
+
+    Raises:
+        ValueError: If no gym with that id exists.
+
+    Returns:
+        bool: True if the gym was found and deleted.
+    """
+    existing = gym_repository.get_by_id(db, gym_id)
+    if not existing:
+        raise ValueError("Gym not found")
+    gym_repository.delete(db, gym_id)
+    return True
