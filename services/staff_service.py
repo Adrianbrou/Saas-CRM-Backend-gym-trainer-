@@ -72,6 +72,19 @@ def get_staff(db: Session, staff_id: int) -> Staff:
     return existing
 
 
+def get_all(db: Session, gym_id: int) -> list[Staff]:
+    """this function is the retrieve the all Staff information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all Staff found as list  in the gym
+    """
+
+    return staff_repository.get_all(db, gym_id)
+
+
 def delete_staff(db: Session, staff_id: int) -> bool:
     """Delete a staff member after verifying they exist.
 

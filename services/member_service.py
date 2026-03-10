@@ -53,6 +53,19 @@ def update_member(db: Session, member_id: int, data: MemberUpdate) -> Member:
     return member_repository.update(db, member_id, updates)
 
 
+def get_all(db: Session, gym_id: int) -> list[Member]:
+    """this function is the retrieve the all member information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all member found as list  in the gym
+    """
+
+    return member_repository.get_all(db, gym_id)
+
+
 def get_member(db: Session, member_id: int) -> Member:
     """Retrieve a member by id after verifying the member exists.
 

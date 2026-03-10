@@ -120,6 +120,19 @@ def get_gym(db: Session, gym_id: int) -> Gym:
     return existing
 
 
+def get_all(db: Session) -> list[Gym]:
+    """this function is the retrieve the all gym information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all gym found as list 
+    """
+
+    return gym_repository.get_all(db)
+
+
 def delete_gym(db: Session, gym_id: int) -> bool:
     """Delete a gym after verifying it exists.
 

@@ -56,6 +56,19 @@ def get_workout(db: Session, workout_id: int) -> Workout:
     return existing
 
 
+def get_all(db: Session) -> list[Workout]:
+    """this function is the retrieve the all Workouts information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all Workouts found as list  in the gym
+    """
+
+    return workout_repository.get_all(db)
+
+
 def update_workout(db: Session, workout_id: int, data: WorkoutUpdate) -> Workout:
     """Update an existing workout's fields after verifying it exists.
 

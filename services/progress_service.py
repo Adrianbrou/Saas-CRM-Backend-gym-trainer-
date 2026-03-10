@@ -37,6 +37,19 @@ def get_progress(db: Session, progress_id: int) -> Progress:
     return progress
 
 
+def get_all(db: Session) -> list[Progress]:
+    """this function is the retrieve the all Progress information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all Progress found as list  in the gym
+    """
+
+    return progress_repository.get_all(db)
+
+
 def update_progress(db: Session, progress_id: int, data: ProgressUpdate) -> Progress:
     """Partially update an existing progress record.
 

@@ -52,6 +52,19 @@ def create_session(db: Session, data: WorkoutSessionCreate) -> WorkoutSession:
     return workout_session_repository.create(db, workout_session)
 
 
+def get_all(db: Session, gym_id: int) -> list[WorkoutSession]:
+    """this function is the retrieve the all Workouts information  from the db
+    Args:
+        db (Session): Session to the database 
+
+
+    Returns:
+        all Workouts found as list  in the gym
+    """
+
+    return workout_session_repository.get_all(db, gym_id)
+
+
 def add_member_to_session(db: Session, data: AttendanceCreate) -> Attendance:
     """Add a member to a workout session by creating an Attendance record.
 
