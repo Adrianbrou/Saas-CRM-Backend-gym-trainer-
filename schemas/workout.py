@@ -37,7 +37,7 @@ class WorkoutResponse(BaseModel):
     name: str
     body_part_id: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None = None
     model_config = {"from_attributes": True}
 
 

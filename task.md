@@ -58,19 +58,20 @@
 - [x] `services/staff_service.py` — register_staff, update_staff, get_staff, delete_staff
 - [x] `services/workout_service.py` — create_workout, get_workout, update_workout, delete_workout
 - [x] `services/workout_session_service.py` — create_session, add_member_to_session, remove_member_from_session
-- [ ] `services/progress_service.py` — log_progress (next session)
+- [x] `services/progress_service.py` — log_progress, get_progress, update_progress, delete_progress, get_by_member/workout/session
 
 ---
 
-## PHASE 5 — API Layer
+## PHASE 5 — API Layer 🔄 IN PROGRESS
 
-- [ ] `api/gyms.py` — CRUD endpoints
-- [ ] `api/members.py` — CRUD endpoints
+- [x] `database/session.py` — get_db dependency added (yield SessionLocal, finally close)
+- [ ] `api/gym.py` — POST /gyms ✅ | GET /gyms, GET /gyms/{id}, PUT /gyms/{id}, DELETE /gyms/{id} pending
+- [ ] `api/member.py` — CRUD endpoints
 - [ ] `api/staff.py` — CRUD endpoints
-- [ ] `api/workouts.py` — CRUD endpoints
-- [ ] `api/sessions.py` — session management endpoints
+- [ ] `api/workout.py` — CRUD endpoints
+- [ ] `api/workout_session.py` — session management endpoints
 - [ ] `api/progress.py` — progress logging endpoints
-- [ ] Register all routers in `main.py`
+- [ ] `main.py` — create FastAPI app, register all routers
 
 ---
 

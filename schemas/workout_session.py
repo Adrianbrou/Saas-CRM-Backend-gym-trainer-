@@ -37,7 +37,7 @@ class WorkoutSessionResponse(BaseModel):
     staff_id: int
     scheduled_at: datetime
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None = None
     model_config = {"from_attributes": True}
 
 

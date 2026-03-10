@@ -48,5 +48,5 @@ class StaffResponse(BaseModel):
     email: EmailStr
     phone: str
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None = None
     model_config = {"from_attributes": True}
