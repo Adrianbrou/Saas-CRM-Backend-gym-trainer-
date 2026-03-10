@@ -6,7 +6,7 @@ Email must be unique per gym — two staff at different gyms can share an email,
 but not two staff at the same gym.
 """
 
-from app.models.Staff import Staff
+from app.models.staff import Staff
 from app.repository import staff_repository
 from app.schemas.staff import StaffCreate, StaffUpdate
 from sqlalchemy.orm import Session
