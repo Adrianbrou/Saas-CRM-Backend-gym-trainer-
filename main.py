@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.api.gym import router as gym_router
+from app.api.gyms import router as gym_router
 
 
 app = FastAPI()

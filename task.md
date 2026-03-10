@@ -65,13 +65,13 @@
 ## PHASE 5 — API Layer 🔄 IN PROGRESS
 
 - [x] `database/session.py` — get_db dependency added (yield SessionLocal, finally close)
-- [ ] `api/gym.py` — POST /gyms ✅ | GET /gyms, GET /gyms/{id}, PUT /gyms/{id}, DELETE /gyms/{id} pending
-- [ ] `api/member.py` — CRUD endpoints
+- [x] `api/gyms.py` — POST, GET all, GET by id, PATCH, DELETE — all complete and tested
+- [ ] `api/members.py` — CRUD endpoints
 - [ ] `api/staff.py` — CRUD endpoints
-- [ ] `api/workout.py` — CRUD endpoints
-- [ ] `api/workout_session.py` — session management endpoints
+- [ ] `api/workouts.py` — CRUD endpoints
+- [ ] `api/workout_sessions.py` — session management endpoints
 - [ ] `api/progress.py` — progress logging endpoints
-- [ ] `main.py` — create FastAPI app, register all routers
+- [ ] `main.py` — register all remaining routers
 
 ---
 

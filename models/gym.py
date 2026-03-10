@@ -11,7 +11,7 @@ class Gym(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     # Basic information
-    name = Column(String, nullable=False, unique=True, index=True)
+    name = Column(String, nullable=False, index=True)
     location = Column(String, nullable=True)
 
     # Timestamps

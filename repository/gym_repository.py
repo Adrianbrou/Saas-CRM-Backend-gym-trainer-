@@ -42,8 +42,33 @@ def get_by_id(db: Session, gym_id: int) -> Gym | None:
 
 
 def get_by_name(db: Session, name: str) -> Gym | None:
+    """Fetch a gym by name only (system-wide).
+
+    Args:
+        db: SQLAlchemy session injected by the caller.
+        name: Gym name to search for.
+
+    Returns:
+        The matching Gym, or None if not found.
+    """
     return db.query(Gym).filter(Gym.name == name).first()
 
+
+def get_by_name_location(db: Session, name: str, location: str) -> Gym | None:
+    """Fetch a gym matching both name and location — used to prevent duplicates on create.
+
+    Two gyms can share the same name if they are in different locations.
+    This check ensures the combination of name + location is unique.
+
+    Args:
+        db: SQLAlchemy session injected by the caller.
+        name: Gym name to search for.
+        location: Gym location to search for.
+
+    Returns:
+        The matching Gym, or None if not found.
+    """
+    return db.query(Gym).filter(Gym.location == location, Gym.name == name).first()
 # fetch all gyms
 
 

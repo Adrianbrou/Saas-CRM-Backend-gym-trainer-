@@ -28,7 +28,8 @@ def register_gym(db: Session, data: GymCreate) -> Gym:
         The service enforces the business rule: gym names must be unique.
 
     HOW IT WORKS:
-        1. Calls gym_repository.get_by_name() to check if the name exists.
+        1. Calls gym_repository.get_by_name_location() to check if a gym with
+           the same name AND location already exists (duplicate check).
         2. If found → raises ValueError. The API layer will catch this
            and return a 400 Bad Request to the client.
         3. If not found → builds a Gym SQLAlchemy object from the schema data
@@ -47,7 +48,8 @@ def register_gym(db: Session, data: GymCreate) -> Gym:
         ValueError: If a gym with the same name already exists.
     """
     # Step 1: Business rule — no duplicate gym names
-    existing = gym_repository.get_by_name(db, data.name)
+    existing = gym_repository.get_by_name_location(
+        db, data.name, data.location)
     if existing:
         raise ValueError("Gym already existing")
 
