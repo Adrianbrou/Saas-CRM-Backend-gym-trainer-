@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.include_router(gym_router)
 app.include_router(staff_router)
-app.include_router(staff_router)
+app.include_router(member_router)
 app.include_router(progress_router)
 app.include_router(workout_sessions_router)
 app.include_router(workout_router)
