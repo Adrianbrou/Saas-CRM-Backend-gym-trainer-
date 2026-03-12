@@ -31,6 +31,7 @@ router = APIRouter(prefix="/staff", tags=["staff"])
     summary="Register a new staff member",
     description=(
         "Creates a new staff member linked to the specified gym. "
+        "Role Can be only 'manager' or 'trainer'"
         "Email must be unique within the gym — two gyms can share an email, "
         "but one gym cannot have two staff members with the same email."
     ),

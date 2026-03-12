@@ -1,0 +1,154 @@
+"""
+members.py — Members API Router
+
+Handles all HTTP endpoints for Member resources.
+Members are tenant-scoped: every member belongs to a gym via gym_id.
+Email must be unique per gym — two gyms can share an email,
+but one gym cannot have two members with the same email.
+
+Route summary:
+    POST   /members/                → register a new member in a gym
+    GET    /members/gyms/{gym_id}   → list all members belonging to a gym
+    GET    /members/{member_id}     → retrieve one member by id
+    PATCH  /members/{member_id}     → partially update a member
+    DELETE /members/{member_id}     → remove a member
+
+Error handling:
+    ValueError from service layer → 400 Bad Request (duplicate or not found)
+"""
+
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from app.database.session import get_db
+from app.services import member_service
+from app.schemas.member import MemberCreate, MemberResponse, MemberUpdate
+
+
+router = APIRouter(prefix="/members", tags=["members"])
+
+
+@router.post(
+    "/",
+    response_model=MemberResponse,
+    summary="Register a new member",
+    description=(
+        "Creates a new member linked to the specified gym. "
+        "Email must be unique within the gym — two gyms can share an email, "
+        "but one gym cannot have two members with the same email."
+    ),
+)
+def create_member(data: MemberCreate, db: Session = Depends(get_db)):
+    """Register a new gym member.
+
+    Args:
+        data: MemberCreate schema — gym_id, name, email, phone.
+        db: Database session injected by FastAPI.
+
+    Returns:
+        MemberResponse: The newly created member including id and timestamps.
+
+    Raises:
+        HTTPException 400: If a member with that email already exists in the gym.
+    """
+    try:
+        return member_service.register_member(db, data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.get(
+    "/gyms/{gym_id}",
+    response_model=list[MemberResponse],
+    summary="List all members in a gym",
+    description="Returns every member belonging to the given gym. May return an empty list.",
+)
+def get_all(gym_id: int, db: Session = Depends(get_db)):
+    """Retrieve all members for a specific gym.
+
+    Args:
+        gym_id: Primary key of the gym to query.
+        db: Database session injected by FastAPI.
+
+    Returns:
+        list[MemberResponse]: All members linked to that gym (may be empty).
+    """
+    return member_service.get_all(db, gym_id)
+
+
+@router.get(
+    "/{member_id}",
+    response_model=MemberResponse,
+    summary="Get a member by id",
+    description="Returns a single member identified by their primary key.",
+)
+def get_member(member_id: int, db: Session = Depends(get_db)):
+    """Retrieve one member by primary key.
+
+    Args:
+        member_id: Primary key of the member.
+        db: Database session injected by FastAPI.
+
+    Returns:
+        MemberResponse: The matching member.
+
+    Raises:
+        HTTPException 400: If no member with that id exists.
+    """
+    try:
+        return member_service.get_member(db, member_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.patch(
+    "/{member_id}",
+    response_model=MemberResponse,
+    summary="Update a member",
+    description=(
+        "Partially updates a member. Only send the fields you want to change. "
+        "gym_id cannot be changed — members cannot be reassigned to a different gym."
+    ),
+)
+def update_member(member_id: int, data: MemberUpdate, db: Session = Depends(get_db)):
+    """Partially update a member's fields.
+
+    Args:
+        member_id: Primary key of the member to update.
+        data: MemberUpdate schema — all fields optional (name, email, phone).
+        db: Database session injected by FastAPI.
+
+    Returns:
+        MemberResponse: The updated member with new values reflected.
+
+    Raises:
+        HTTPException 400: If no member with that id exists.
+    """
+    try:
+        return member_service.update_member(db, member_id, data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete(
+    "/{member_id}",
+    response_model=bool,
+    summary="Delete a member",
+    description="Permanently removes a member from the database. Returns True on success.",
+)
+def delete_member(member_id: int, db: Session = Depends(get_db)):
+    """Delete a member by primary key.
+
+    Args:
+        member_id: Primary key of the member to delete.
+        db: Database session injected by FastAPI.
+
+    Returns:
+        bool: True if the member was found and deleted.
+
+    Raises:
+        HTTPException 400: If no member with that id exists.
+    """
+    try:
+        return member_service.delete_member(db, member_id)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
