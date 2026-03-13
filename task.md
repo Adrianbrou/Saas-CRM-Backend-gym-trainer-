@@ -86,7 +86,7 @@
 - [x] `services/staff_service.py` — hashes password before saving, pops plain password
 - [x] `api/auth.py` — POST /auth/login → JWT token (email + gym_id + password)
 - [x] `main.py` — auth_router registered
-- [ ] `core/dependencies.py` — get_current_user dependency (decode JWT → return Staff)
+- [x] `core/dependency.py` — get_current_user dependency (decode JWT → return Staff)
 - [ ] Role-based access control (manager vs trainer permissions)
 - [ ] Protect routes with Depends(get_current_user)
 
