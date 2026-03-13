@@ -22,6 +22,7 @@ class Staff(Base):
     name = Column(String, nullable=False, index=True, unique=True)
     email = Column(String, nullable=False, index=True, unique=True)
     phone = Column(String, nullable=False, index=True, unique=True)
+    hashed_password = Column(String, nullable=True)
 
     # foreign key from the gym
     gym_id = Column(Integer,

@@ -18,4 +18,4 @@ app.include_router(workout_router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", reload=True)
+    uvicorn.run("app.main:app", reload=True)  # uvicorn app.main:app --reload
