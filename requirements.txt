@@ -7,3 +7,5 @@ uvicorn
 alembic
 pydantic
 psycopg2-binary
+passlib[bcrypt] #— bcrypt hashing
+python-jose[cryptography] #— JWT generation and validation

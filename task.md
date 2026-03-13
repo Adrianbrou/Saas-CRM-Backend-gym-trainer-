@@ -3,6 +3,7 @@
 ## PHASE 1 — Database Layer ✅ COMPLETE
 
 ### Setup
+
 - [x] Fix engine.py — remove SQLite-only `check_same_thread`
 - [x] Add RuntimeError guard for missing DATABASE_URL
 - [x] Create `.env` with PostgreSQL connection string
@@ -10,6 +11,7 @@
 - [x] Fix `database/base.py` typo (sqlachemy → sqlalchemy)
 
 ### Models
+
 - [x] `models/gym.py` — Gym model with timestamps + relationships
 - [x] `models/member.py` — Member model with FK, timestamps, relationship
 - [x] `models/Staff.py` — Staff model with RoleEnum (manager/trainer)
@@ -21,6 +23,7 @@
 - [x] Delete `models/personal_training.py` (empty, wrong concept)
 
 ### Alembic Migrations
+
 - [x] Initialize Alembic (`alembic init migrations`)
 - [x] Configure `migrations/env.py` — sys.path fix, Base.metadata, DATABASE_URL from .env
 - [x] Run first migration (`alembic revision --autogenerate -m "initial tables"`)
@@ -62,16 +65,16 @@
 
 ---
 
-## PHASE 5 — API Layer 🔄 IN PROGRESS
+## PHASE 5 — API Layer ✅ COMPLETE
 
 - [x] `database/session.py` — get_db dependency added (yield SessionLocal, finally close)
 - [x] `api/gyms.py` — POST, GET all, GET by id, PATCH, DELETE — all complete and tested
-- [ ] `api/members.py` — CRUD endpoints
-- [ ] `api/staff.py` — CRUD endpoints
-- [ ] `api/workouts.py` — CRUD endpoints
-- [ ] `api/workout_sessions.py` — session management endpoints
-- [ ] `api/progress.py` — progress logging endpoints
-- [ ] `main.py` — register all remaining routers
+- [x] `api/members.py` — CRUD endpoints + GET /members/gyms/{gym_id}
+- [x] `api/staff.py` — CRUD endpoints + GET /staff/gym/{gym_id} (route conflict fix)
+- [x] `api/workouts.py` — CRUD endpoints (global scope, not gym-scoped)
+- [x] `api/workout_sessions.py` — create session, list by gym, add/remove member attendance
+- [x] `api/progress.py` — log, get, update, delete + filter by member/workout/session
+- [x] `main.py` — all 6 routers registered
 
 ---
 
