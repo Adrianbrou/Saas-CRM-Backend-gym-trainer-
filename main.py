@@ -5,10 +5,12 @@ from app.api.members import router as member_router
 from app.api.progress import router as progress_router
 from app.api.workout_sessions import router as workout_sessions_router
 from app.api.workouts import router as workout_router
+from app.api.auth import router as auth_router
 
 
 app = FastAPI()
 
+app.include_router(auth_router)
 app.include_router(gym_router)
 app.include_router(staff_router)
 app.include_router(member_router)

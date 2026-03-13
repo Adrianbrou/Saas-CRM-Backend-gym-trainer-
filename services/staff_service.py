@@ -9,6 +9,7 @@ but not two staff at the same gym.
 from app.models.staff import Staff
 from app.repository import staff_repository
 from app.schemas.staff import StaffCreate, StaffUpdate
+from app.core import security
 from sqlalchemy.orm import Session
 
 
@@ -28,7 +29,10 @@ def register_staff(db: Session, data: StaffCreate) -> Staff:
     existing = staff_repository.get_by_email(db, data.email, data.gym_id)
     if existing:
         raise ValueError("Staff member already exists in this gym")
-    staff = Staff(**data.model_dump())
+    data_dict = data.model_dump()
+    data_dict["hashed_password"] = security.hash_password(
+        data_dict.pop("password"))
+    staff = Staff(**data_dict)
     return staff_repository.create(db, staff)
 
 
@@ -50,6 +54,7 @@ def update_staff(db: Session, staff_id: int, data: StaffUpdate) -> Staff:
     if not existing:
         raise ValueError("Staff not found")
     updates = data.model_dump(exclude_unset=True)
+
     return staff_repository.update(db, staff_id, updates)
 
 

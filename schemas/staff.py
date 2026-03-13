@@ -21,6 +21,7 @@ class StaffCreate(BaseModel):
     email: EmailStr
     phone: str
     gym_id: int
+    password: str
 
 
 class StaffUpdate(BaseModel):
