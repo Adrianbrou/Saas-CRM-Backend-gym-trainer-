@@ -80,11 +80,15 @@
 
 ## PHASE 6 — Authentication & Security
 
-- [ ] `core/security.py` — bcrypt password hashing + verify
-- [ ] JWT access token generation + validation
-- [ ] `get_current_user` dependency
+- [x] `core/security.py` — bcrypt password hashing + verify + JWT create/decode
+- [x] `models/Staff.py` — hashed_password column added (nullable=True) + migration applied
+- [x] `schemas/staff.py` — password field added to StaffCreate (not exposed in StaffResponse)
+- [x] `services/staff_service.py` — hashes password before saving, pops plain password
+- [x] `api/auth.py` — POST /auth/login → JWT token (email + gym_id + password)
+- [x] `main.py` — auth_router registered
+- [ ] `core/dependencies.py` — get_current_user dependency (decode JWT → return Staff)
 - [ ] Role-based access control (manager vs trainer permissions)
-- [ ] Auth middleware
+- [ ] Protect routes with Depends(get_current_user)
 
 ---
 

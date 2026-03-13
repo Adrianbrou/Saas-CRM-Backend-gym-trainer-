@@ -33,3 +33,28 @@ Gym.txt
 step.md
 PROJECT_STRUCTURE.md
 .claude/
+
+# =============================================================
+# BUILD / PACKAGING — generated when running pip install -e .
+# =============================================================
+*.egg-info/
+dist/
+build/
+
+# =============================================================
+# LOGS — runtime output files, not source code
+# =============================================================
+*.log
+
+# =============================================================
+# TESTING — pytest cache and coverage reports
+# =============================================================
+.pytest_cache/
+htmlcov/
+.coverage
+
+# =============================================================
+# LOCAL DATABASES — SQLite files sometimes created during dev/tests
+# =============================================================
+*.db
+*.sqlite3
