@@ -22,7 +22,7 @@ class Member(Base):
     # create the foreign key from the gym table
     gym_id = Column(Integer,
                     ForeignKey("gyms.id", ondelete="CASCADE"),
-                    nullable=False)
+                    nullable=False, index=True)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

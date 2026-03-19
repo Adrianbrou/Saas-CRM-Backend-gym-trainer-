@@ -16,7 +16,7 @@ class Workout(Base):
     body_part_id = Column(Integer,
                           ForeignKey("body_part.id", ondelete="CASCADE"),
 
-                          nullable=False)
+                          nullable=False, index=True)
     # timestampss
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())

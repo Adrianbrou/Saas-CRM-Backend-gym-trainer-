@@ -10,11 +10,11 @@ class WorkoutSession(Base):
 
     gym_id = Column(Integer,
                     ForeignKey("gyms.id", ondelete="CASCADE"),
-                    nullable=False
+                    nullable=False, index=True
                     )
     staff_id = Column(Integer,
                       ForeignKey("staff.id", ondelete="CASCADE"),
-                      nullable=False
+                      nullable=False, index=True
                       )
     # timestamp
     scheduled_at = Column(DateTime(timezone=True), nullable=False)

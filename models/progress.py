@@ -14,11 +14,11 @@ class Progress(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     member_id = Column(Integer,
-                       ForeignKey("members.id", ondelete="CASCADE"), nullable=False)
+                       ForeignKey("members.id", ondelete="CASCADE"), nullable=False, index=True)
     workout_id = Column(Integer, ForeignKey(
-        "workout.id", ondelete="CASCADE"), nullable=False)
+        "workout.id", ondelete="CASCADE"), nullable=False, index=True)
     workout_session_id = Column(Integer, ForeignKey(
-        "workout_session.id", ondelete="CASCADE"), nullable=False)
+        "workout_session.id", ondelete="CASCADE"), nullable=False, index=True)
 
     weight_kg = Column(Float, nullable=True)
     sets = Column(Integer)

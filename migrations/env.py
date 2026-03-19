@@ -7,6 +7,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 from app.database.base import Base  # noqa: E402
+import app.models  # noqa: F401 — registers all models with Base.metadata
 from dotenv import load_dotenv  # noqa: E402
 
 
