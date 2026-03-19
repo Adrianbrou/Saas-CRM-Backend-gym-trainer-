@@ -33,7 +33,7 @@ def get_by_id(db: Session, staff_id: int) -> Staff | None:
     return db.query(Staff).filter(Staff.id == staff_id).first()
 
 
-def get_all(db: Session, gym_id: int) -> List[Staff]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> List[Staff]:
     """Fetch all staff members belonging to a specific gym.
 
     Filters by gym_id to enforce multi-tenant isolation —
@@ -46,7 +46,7 @@ def get_all(db: Session, gym_id: int) -> List[Staff]:
     Returns:
         List[Staff]: All staff registered under that gym. Empty list if none.
     """
-    return db.query(Staff).filter(Staff.gym_id == gym_id).all()
+    return db.query(Staff).filter(Staff.gym_id == gym_id).offset(skip).limit(limit).all()
 
 
 def get_by_email(db: Session, email: str, gym_id: int) -> Staff | None:

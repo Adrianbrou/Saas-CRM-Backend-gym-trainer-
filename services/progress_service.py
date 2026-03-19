@@ -37,17 +37,18 @@ def get_progress(db: Session, progress_id: int) -> Progress:
     return progress
 
 
-def get_all(db: Session) -> list[Progress]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> list[Progress]:
     """this function is the retrieve the all Progress information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
-        all Progress found as list  in the gym
+        all Progress found as list
     """
 
-    return progress_repository.get_all(db)
+    return progress_repository.get_all(db, skip=skip, limit=limit)
 
 
 def update_progress(db: Session, progress_id: int, data: ProgressUpdate) -> Progress:
@@ -86,16 +87,16 @@ def delete_progress(db: Session, progress_id: int) -> None:
         raise ValueError(f"Progress record {progress_id} not found.")
 
 
-def get_progress_by_member(db: Session, member_id: int) -> list[Progress]:
+def get_progress_by_member(db: Session, member_id: int, skip: int = 0, limit: int = 20) -> list[Progress]:
     """Fetch all progress records for a member."""
-    return progress_repository.get_by_member(db, member_id)
+    return progress_repository.get_by_member(db, member_id, skip=skip, limit=limit)
 
 
-def get_progress_by_workout(db: Session, workout_id: int) -> list[Progress]:
+def get_progress_by_workout(db: Session, workout_id: int, skip: int = 0, limit: int = 20) -> list[Progress]:
     """Fetch all progress records for a specific workout."""
-    return progress_repository.get_by_workout(db, workout_id)
+    return progress_repository.get_by_workout(db, workout_id, skip=skip, limit=limit)
 
 
-def get_progress_by_session(db: Session, session_id: int) -> list[Progress]:
+def get_progress_by_session(db: Session, session_id: int, skip: int = 0, limit: int = 20) -> list[Progress]:
     """Fetch all progress records logged in a specific workout session."""
-    return progress_repository.get_by_session_id(db, session_id)
+    return progress_repository.get_by_session_id(db, session_id, skip=skip, limit=limit)

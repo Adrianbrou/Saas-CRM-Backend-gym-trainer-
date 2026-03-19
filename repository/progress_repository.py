@@ -42,7 +42,7 @@ def get_by_id(db: Session, progress_id: int) -> Progress | None:
     return db.query(Progress).filter(Progress.id == progress_id).first()
 
 
-def get_all(db: Session) -> List[Progress]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> List[Progress]:
     """Fetch all Progress records in the database.
 
     Args:
@@ -51,46 +51,52 @@ def get_all(db: Session) -> List[Progress]:
     Returns:
         A list of all Progress records (empty list if none exist).
     """
-    return db.query(Progress).all()
+    return db.query(Progress).offset(skip).limit(limit).all()
 
 
-def get_by_member(db: Session, member_id: int) -> List[Progress]:
+def get_by_member(db: Session, member_id: int, skip: int = 0, limit: int = 20) -> List[Progress]:
     """Fetch all Progress records for a specific member.
 
     Args:
         db: SQLAlchemy session injected by the caller.
         member_id: Primary key of the member to filter by.
+        skip (int): Number of records to skip (offset). Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         A list of Progress records for that member (empty list if none exist).
     """
-    return db.query(Progress).filter(Progress.member_id == member_id).all()
+    return db.query(Progress).filter(Progress.member_id == member_id).offset(skip).limit(limit).all()
 
 
-def get_by_workout(db: Session, workout_id: int) -> List[Progress]:
+def get_by_workout(db: Session, workout_id: int, skip: int = 0, limit: int = 20) -> List[Progress]:
     """Fetch all Progress records for a specific workout.
 
     Args:
         db: SQLAlchemy session injected by the caller.
         workout_id: Primary key of the workout to filter by.
+        skip (int): Number of records to skip (offset). Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         A list of Progress records for that workout (empty list if none exist).
     """
-    return db.query(Progress).filter(Progress.workout_id == workout_id).all()
+    return db.query(Progress).filter(Progress.workout_id == workout_id).offset(skip).limit(limit).all()
 
 
-def get_by_session_id(db: Session, session_id: int) -> List[Progress]:
+def get_by_session_id(db: Session, session_id: int, skip: int = 0, limit: int = 20) -> List[Progress]:
     """Fetch all Progress records logged during a specific workout session.
 
     Args:
         db: SQLAlchemy session injected by the caller.
         session_id: Primary key of the WorkoutSession to filter by.
+        skip (int): Number of records to skip (offset). Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         A list of Progress records for that session (empty list if none exist).
     """
-    return db.query(Progress).filter(Progress.workout_session_id == session_id).all()
+    return db.query(Progress).filter(Progress.workout_session_id == session_id).offset(skip).limit(limit).all()
 
 
 def update(db: Session, progress_id: int, updates: dict) -> Progress | None:

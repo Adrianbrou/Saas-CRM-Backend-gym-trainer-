@@ -33,7 +33,7 @@ def get_by_id(db: Session, member_id: int) -> Member | None:
     return db.query(Member).filter(Member.id == member_id).first()
 
 
-def get_all(db: Session, gym_id: int) -> List[Member]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> List[Member]:
     """Fetch all members belonging to a specific gym.
 
     Filters by gym_id to enforce multi-tenant isolation —
@@ -42,11 +42,13 @@ def get_all(db: Session, gym_id: int) -> List[Member]:
     Args:
         db (Session): Database session injected from outside.
         gym_id (int): The id of the gym whose members to retrieve.
+        skip (int): Number of records to skip (offset). Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         List[Member]: All members registered under that gym. Empty list if none.
     """
-    return db.query(Member).filter(Member.gym_id == gym_id).all()
+    return db.query(Member).filter(Member.gym_id == gym_id).offset(skip).limit(limit).all()
 
 
 def get_by_email(db: Session, email: str, gym_id: int) -> Member | None:

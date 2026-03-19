@@ -49,7 +49,7 @@ def get_by_id(db: Session, workout_session_id: int) -> WorkoutSession | None:
         WorkoutSession.id == workout_session_id).first()
 
 
-def get_all(db: Session, gym_id: int) -> List[WorkoutSession]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> List[WorkoutSession]:
     """Fetch all WorkoutSessions belonging to a specific gym.
 
     Sessions are tenant-scoped, so gym_id is always required.
@@ -61,7 +61,7 @@ def get_all(db: Session, gym_id: int) -> List[WorkoutSession]:
     Returns:
         A list of WorkoutSessions for that gym (empty list if none exist).
     """
-    return db.query(WorkoutSession).filter(WorkoutSession.gym_id == gym_id).all()
+    return db.query(WorkoutSession).filter(WorkoutSession.gym_id == gym_id).offset(skip).limit(limit).all()
 
 
 def get_by_trainer(db: Session, trainer_id: int) -> List[WorkoutSession]:

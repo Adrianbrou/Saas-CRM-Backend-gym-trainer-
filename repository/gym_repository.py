@@ -72,7 +72,7 @@ def get_by_name_location(db: Session, name: str, location: str) -> Gym | None:
 # fetch all gyms
 
 
-def get_all(db: Session) -> List[Gym]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> List[Gym]:
     """Fetch all gyms
 
     Args:
@@ -81,7 +81,7 @@ def get_all(db: Session) -> List[Gym]:
     Returns:
         List[Gym]: the list of all the gyms founded
     """
-    return db.query(Gym).all()
+    return db.query(Gym).offset(skip).limit(limit).all()
 
 
 def update(db: Session, gym_id: int, updates: dict) -> Gym | None:

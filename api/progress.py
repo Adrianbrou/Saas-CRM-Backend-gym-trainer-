@@ -64,17 +64,19 @@ def log_progress(data: ProgressCreate, _=Depends(get_current_user), db: Session 
     summary="Get all progress records for a member",
     description="Returns every progress record logged for the given member.",
 )
-def get_by_member(member_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_by_member(member_id: int, _=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all progress records for a specific member.
 
     Args:
         member_id: Primary key of the member.
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[ProgressResponse]: All progress records for that member (may be empty).
     """
-    return progress_service.get_progress_by_member(db, member_id)
+    return progress_service.get_progress_by_member(db, member_id, skip=skip, limit=limit)
 
 
 @router.get(
@@ -83,17 +85,19 @@ def get_by_member(member_id: int, _=Depends(get_current_user), db: Session = Dep
     summary="Get all progress records for a workout",
     description="Returns every progress record logged for the given workout across all members.",
 )
-def get_by_workout(workout_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_by_workout(workout_id: int, _=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all progress records for a specific workout.
 
     Args:
         workout_id: Primary key of the workout.
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[ProgressResponse]: All progress records for that workout (may be empty).
     """
-    return progress_service.get_progress_by_workout(db, workout_id)
+    return progress_service.get_progress_by_workout(db, workout_id, skip=skip, limit=limit)
 
 
 @router.get(
@@ -102,17 +106,19 @@ def get_by_workout(workout_id: int, _=Depends(get_current_user), db: Session = D
     summary="Get all progress records from a session",
     description="Returns every progress record logged during the given workout session.",
 )
-def get_by_session(session_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_by_session(session_id: int, _=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all progress records logged in a specific workout session.
 
     Args:
         session_id: Primary key of the workout session.
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[ProgressResponse]: All progress records from that session (may be empty).
     """
-    return progress_service.get_progress_by_session(db, session_id)
+    return progress_service.get_progress_by_session(db, session_id, skip=skip, limit=limit)
 
 
 @router.get(
@@ -121,16 +127,18 @@ def get_by_session(session_id: int, _=Depends(get_current_user), db: Session = D
     summary="List all progress records",
     description="Returns every progress record in the system.",
 )
-def get_all(_=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all(_=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all progress records in the system.
 
     Args:
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[ProgressResponse]: All progress records (may be empty).
     """
-    return progress_service.get_all(db)
+    return progress_service.get_all(db, skip=skip, limit=limit)
 
 
 @router.get(

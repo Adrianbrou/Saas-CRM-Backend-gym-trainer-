@@ -52,17 +52,19 @@ def create_session(db: Session, data: WorkoutSessionCreate) -> WorkoutSession:
     return workout_session_repository.create(db, workout_session)
 
 
-def get_all(db: Session, gym_id: int) -> list[WorkoutSession]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> list[WorkoutSession]:
     """this function is the retrieve the all Workouts information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        gym_id (int): The id of the gym whose sessions to retrieve.
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         all Workouts found as list  in the gym
     """
 
-    return workout_session_repository.get_all(db, gym_id)
+    return workout_session_repository.get_all(db, gym_id, skip=skip, limit=limit)
 
 
 def add_member_to_session(db: Session, data: AttendanceCreate) -> Attendance:

@@ -63,16 +63,18 @@ def create_gym(data: GymCreate, db: Session = Depends(get_db)):
     summary="List all gyms",
     description="Returns every gym registered in the system. May return an empty list.",
 )
-def get_all_gym(_=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all_gym(_=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all gyms in the system.
 
     Args:
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[GymResponse]: All gyms (may be empty).
     """
-    return gym_service.get_all(db)
+    return gym_service.get_all(db, skip=skip, limit=limit)
 
 
 @router.get(

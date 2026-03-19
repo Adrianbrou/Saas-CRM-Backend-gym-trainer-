@@ -56,17 +56,18 @@ def get_workout(db: Session, workout_id: int) -> Workout:
     return existing
 
 
-def get_all(db: Session) -> list[Workout]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> list[Workout]:
     """this function is the retrieve the all Workouts information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
-        all Workouts found as list  in the gym
+        all Workouts found as list
     """
 
-    return workout_repository.get_all(db)
+    return workout_repository.get_all(db, skip=skip, limit=limit)
 
 
 def update_workout(db: Session, workout_id: int, data: WorkoutUpdate) -> Workout:

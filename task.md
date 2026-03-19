@@ -95,8 +95,8 @@
 ## PHASE 7 — Background Tasks & Email
 
 - [x] Welcome email on member registration (FastAPI BackgroundTasks)
-- [ ] Session notification dispatch
-- [ ] Structured logging setup
+- [x] Session notification dispatch
+- [x] Structured logging setup
 
 ---
 

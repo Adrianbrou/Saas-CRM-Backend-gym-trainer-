@@ -77,17 +77,19 @@ def get_staff(db: Session, staff_id: int) -> Staff:
     return existing
 
 
-def get_all(db: Session, gym_id: int) -> list[Staff]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> list[Staff]:
     """this function is the retrieve the all Staff information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        gym_id (int): The id of the gym whose staff to retrieve.
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         all Staff found as list  in the gym
     """
 
-    return staff_repository.get_all(db, gym_id)
+    return staff_repository.get_all(db, gym_id, skip=skip, limit=limit)
 
 
 def delete_staff(db: Session, staff_id: int) -> bool:

@@ -63,16 +63,18 @@ def create_workout(data: WorkoutCreate, _=Depends(require_manager), db: Session 
     summary="List all workouts",
     description="Returns every workout in the system. Workouts are shared across all gyms.",
 )
-def get_all(_=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all(_=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all workouts in the system.
 
     Args:
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[WorkoutResponse]: All workouts (may be empty).
     """
-    return workout_service.get_all(db)
+    return workout_service.get_all(db, skip=skip, limit=limit)
 
 
 @router.get(

@@ -53,17 +53,19 @@ def update_member(db: Session, member_id: int, data: MemberUpdate) -> Member:
     return member_repository.update(db, member_id, updates)
 
 
-def get_all(db: Session, gym_id: int) -> list[Member]:
+def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> list[Member]:
     """this function is the retrieve the all member information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        gym_id (int): The id of the gym whose members to retrieve.
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
         all member found as list  in the gym
     """
 
-    return member_repository.get_all(db, gym_id)
+    return member_repository.get_all(db, gym_id, skip=skip, limit=limit)
 
 
 def get_member(db: Session, member_id: int) -> Member:

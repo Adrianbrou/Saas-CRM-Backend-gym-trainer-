@@ -71,17 +71,19 @@ def create_session(data: WorkoutSessionCreate, _=Depends(require_manager), db: S
     summary="List all sessions for a gym",
     description="Returns every workout session scheduled for the given gym. May return an empty list.",
 )
-def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all workout sessions for a specific gym.
 
     Args:
         gym_id: Primary key of the gym to query.
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[WorkoutSessionResponse]: All sessions for that gym (may be empty).
     """
-    return workout_session_service.get_all(db, gym_id)
+    return workout_session_service.get_all(db, gym_id, skip=skip, limit=limit)
 
 
 @router.post(

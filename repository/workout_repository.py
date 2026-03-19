@@ -53,7 +53,7 @@ def get_by_body_part(db: Session, body_part_id: int) -> List[Workout]:
     return db.query(Workout).filter(Workout.body_part_id == body_part_id).all()
 
 
-def get_all(db: Session) -> List[Workout]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> List[Workout]:
     """Fetch all Workouts in the database.
 
     Workouts are not tenant-scoped, so no gym_id filter is needed.
@@ -64,7 +64,7 @@ def get_all(db: Session) -> List[Workout]:
     Returns:
         A list of all Workouts (empty list if none exist).
     """
-    return db.query(Workout).all()
+    return db.query(Workout).offset(skip).limit(limit).all()
 
 
 def update(db: Session, workout_id: int, updates: dict) -> Workout | None:

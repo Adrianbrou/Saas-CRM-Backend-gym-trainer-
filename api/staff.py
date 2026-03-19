@@ -63,17 +63,19 @@ def create_staff(data: StaffCreate, _=Depends(require_manager), db: Session = De
     summary="List all staff in a gym",
     description="Returns every staff member (managers and trainers) belonging to the given gym.",
 )
-def get_all_staff(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
+def get_all_staff(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all staff members for a specific gym.
 
     Args:
         gym_id: Primary key of the gym to query.
         db: Database session injected by FastAPI.
+        skip: Number of records to skip. Defaults to 0.
+        limit: Maximum number of records to return. Defaults to 20.
 
     Returns:
         list[StaffResponse]: All staff members linked to that gym (may be empty).
     """
-    return staff_service.get_all(db, gym_id)
+    return staff_service.get_all(db, gym_id, skip=skip, limit=limit)
 
 
 @router.get(

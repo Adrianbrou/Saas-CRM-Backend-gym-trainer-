@@ -122,17 +122,18 @@ def get_gym(db: Session, gym_id: int) -> Gym:
     return existing
 
 
-def get_all(db: Session) -> list[Gym]:
+def get_all(db: Session, skip: int = 0, limit: int = 20) -> list[Gym]:
     """this function is the retrieve the all gym information  from the db
     Args:
-        db (Session): Session to the database 
-
+        db (Session): Session to the database
+        skip (int): Number of records to skip. Defaults to 0.
+        limit (int): Maximum number of records to return. Defaults to 20.
 
     Returns:
-        all gym found as list 
+        all gym found as list
     """
 
-    return gym_repository.get_all(db)
+    return gym_repository.get_all(db, skip=skip, limit=limit)
 
 
 def delete_gym(db: Session, gym_id: int) -> bool:
