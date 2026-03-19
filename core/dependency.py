@@ -67,3 +67,23 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         )
 
     return staff
+
+
+def require_manager(current_user: Staff = Depends(get_current_user)) -> Staff:
+    """Restrict access to manager-role staff only.
+
+    Wraps get_current_user — authentication is handled first, then role is checked.
+
+    Args:
+        current_user: The authenticated Staff member from get_current_user.
+
+    Returns:
+        Staff: The authenticated staff member if they are a manager.
+
+    Raises:
+        HTTPException 403: If the staff member's role is not manager.
+    """
+    if current_user.role.value != "manager":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Managers only")
+    return current_user
