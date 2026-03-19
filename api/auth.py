@@ -29,6 +29,10 @@ from pydantic import BaseModel
 from app.database.session import get_db
 from app.repository import staff_repository
 from app.core.security import verify_password, create_access_token
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
@@ -89,5 +93,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         "role": staff.role.value,
         "gym": staff.gym_id,
     })
+    logger.info("Staff login successful: %s (role=%s)",
+                form_data.username, staff.role.value)
 
     return TokenResponse(access_token=token)

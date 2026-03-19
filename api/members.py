@@ -25,6 +25,11 @@ from app.schemas.member import MemberCreate, MemberResponse, MemberUpdate
 from app.core.dependency import get_current_user, require_manager
 from fastapi import BackgroundTasks
 from app.core.email import send_welcome_email
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 router = APIRouter(prefix="/members", tags=["members"])
 
@@ -43,8 +48,6 @@ def create_member(background_tasks: BackgroundTasks, data: MemberCreate, _=Depen
     """Register a new gym member.
 
     Args:
-
-
         background_tasks: FastAPI BackgroundTasks — used to dispatch the welcome email after save.
         data: MemberCreate schema — gym_id, name, email, phone.
         db: Database session injected by FastAPI.
@@ -57,6 +60,9 @@ def create_member(background_tasks: BackgroundTasks, data: MemberCreate, _=Depen
     """
     try:
         member = member_service.register_member(db, data)
+        logger.info("Member registered: %s (gym_id=%s)",
+                    data.email, data.gym_id)
+
         background_tasks.add_task(
             send_welcome_email, data.email, data.name)
         return member

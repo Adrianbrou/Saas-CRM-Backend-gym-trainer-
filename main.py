@@ -6,6 +6,10 @@ from app.api.progress import router as progress_router
 from app.api.workout_sessions import router as workout_sessions_router
 from app.api.workouts import router as workout_router
 from app.api.auth import router as auth_router
+from app.core.logging_config import setup_logging
+
+
+setup_logging()
 
 
 app = FastAPI()
