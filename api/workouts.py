@@ -22,6 +22,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.services import workout_service
 from app.schemas.workout import WorkoutCreate, WorkoutResponse, WorkoutUpdate
+from app.core.dependency import get_current_user, require_manager
 
 
 router = APIRouter(prefix="/workouts", tags=["workouts"])
@@ -37,7 +38,7 @@ router = APIRouter(prefix="/workouts", tags=["workouts"])
         "workouts are shared between all gyms, not scoped per gym."
     ),
 )
-def create_workout(data: WorkoutCreate, db: Session = Depends(get_db)):
+def create_workout(data: WorkoutCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Create a new workout.
 
     Args:
@@ -62,7 +63,7 @@ def create_workout(data: WorkoutCreate, db: Session = Depends(get_db)):
     summary="List all workouts",
     description="Returns every workout in the system. Workouts are shared across all gyms.",
 )
-def get_all(db: Session = Depends(get_db)):
+def get_all(_=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all workouts in the system.
 
     Args:
@@ -80,7 +81,7 @@ def get_all(db: Session = Depends(get_db)):
     summary="Get a workout by id",
     description="Returns a single workout identified by its primary key.",
 )
-def get_workout(workout_id: int, db: Session = Depends(get_db)):
+def get_workout(workout_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve one workout by primary key.
 
     Args:
@@ -105,7 +106,7 @@ def get_workout(workout_id: int, db: Session = Depends(get_db)):
     summary="Update a workout",
     description="Partially updates a workout. Only send the fields you want to change.",
 )
-def update_workout(workout_id: int, data: WorkoutUpdate, db: Session = Depends(get_db)):
+def update_workout(workout_id: int, data: WorkoutUpdate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Partially update a workout's fields.
 
     Args:
@@ -131,7 +132,7 @@ def update_workout(workout_id: int, data: WorkoutUpdate, db: Session = Depends(g
     summary="Delete a workout",
     description="Permanently removes a workout from the system. Returns True on success.",
 )
-def delete_workout(workout_id: int, db: Session = Depends(get_db)):
+def delete_workout(workout_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Delete a workout by primary key.
 
     Args:

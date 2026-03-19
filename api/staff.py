@@ -21,6 +21,8 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.services import staff_service
 from app.schemas.staff import StaffCreate, StaffResponse, StaffUpdate
+from app.core.dependency import get_current_user, require_manager
+
 
 router = APIRouter(prefix="/staff", tags=["staff"])
 
@@ -36,7 +38,7 @@ router = APIRouter(prefix="/staff", tags=["staff"])
         "but one gym cannot have two staff members with the same email."
     ),
 )
-def create_staff(data: StaffCreate, db: Session = Depends(get_db)):
+def create_staff(data: StaffCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Register a new staff member.
 
     Args:
@@ -61,7 +63,7 @@ def create_staff(data: StaffCreate, db: Session = Depends(get_db)):
     summary="List all staff in a gym",
     description="Returns every staff member (managers and trainers) belonging to the given gym.",
 )
-def get_all_staff(gym_id: int, db: Session = Depends(get_db)):
+def get_all_staff(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all staff members for a specific gym.
 
     Args:
@@ -80,7 +82,7 @@ def get_all_staff(gym_id: int, db: Session = Depends(get_db)):
     summary="Get a staff member by id",
     description="Returns a single staff member identified by their primary key.",
 )
-def get_staff(staff_id: int, db: Session = Depends(get_db)):
+def get_staff(staff_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve one staff member by primary key.
 
     Args:
@@ -108,7 +110,7 @@ def get_staff(staff_id: int, db: Session = Depends(get_db)):
         "gym_id cannot be changed — staff cannot be reassigned to a different gym."
     ),
 )
-def update_staff(staff_id: int, data: StaffUpdate, db: Session = Depends(get_db)):
+def update_staff(staff_id: int, data: StaffUpdate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Partially update a staff member's fields.
 
     Args:
@@ -134,7 +136,7 @@ def update_staff(staff_id: int, data: StaffUpdate, db: Session = Depends(get_db)
     summary="Delete a staff member",
     description="Permanently removes a staff member from the database. Returns True on success.",
 )
-def delete_staff(staff_id: int, db: Session = Depends(get_db)):
+def delete_staff(staff_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Delete a staff member by primary key.
 
     Args:

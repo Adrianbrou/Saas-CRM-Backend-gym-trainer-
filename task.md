@@ -87,8 +87,8 @@
 - [x] `api/auth.py` — POST /auth/login → JWT token (email + gym_id + password)
 - [x] `main.py` — auth_router registered
 - [x] `core/dependency.py` — get_current_user dependency (decode JWT → return Staff)
-- [ ] Role-based access control (manager vs trainer permissions)
-- [ ] Protect routes with Depends(get_current_user)
+- [x] Role-based access control (manager vs trainer permissions)
+- [x] Protect routes with Depends(get_current_user)
 
 ---
 

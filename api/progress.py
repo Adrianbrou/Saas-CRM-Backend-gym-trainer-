@@ -25,6 +25,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.services import progress_service
 from app.schemas.progress import ProgressCreate, ProgressResponse, ProgressUpdate
+from app.core.dependency import get_current_user
 
 
 router = APIRouter(prefix="/progress", tags=["progress"])
@@ -40,7 +41,7 @@ router = APIRouter(prefix="/progress", tags=["progress"])
         "workout_session_id) are required."
     ),
 )
-def log_progress(data: ProgressCreate, db: Session = Depends(get_db)):
+def log_progress(data: ProgressCreate, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Log a new progress record for a member.
 
     Args:
@@ -63,7 +64,7 @@ def log_progress(data: ProgressCreate, db: Session = Depends(get_db)):
     summary="Get all progress records for a member",
     description="Returns every progress record logged for the given member.",
 )
-def get_by_member(member_id: int, db: Session = Depends(get_db)):
+def get_by_member(member_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all progress records for a specific member.
 
     Args:
@@ -82,7 +83,7 @@ def get_by_member(member_id: int, db: Session = Depends(get_db)):
     summary="Get all progress records for a workout",
     description="Returns every progress record logged for the given workout across all members.",
 )
-def get_by_workout(workout_id: int, db: Session = Depends(get_db)):
+def get_by_workout(workout_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all progress records for a specific workout.
 
     Args:
@@ -101,7 +102,7 @@ def get_by_workout(workout_id: int, db: Session = Depends(get_db)):
     summary="Get all progress records from a session",
     description="Returns every progress record logged during the given workout session.",
 )
-def get_by_session(session_id: int, db: Session = Depends(get_db)):
+def get_by_session(session_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all progress records logged in a specific workout session.
 
     Args:
@@ -120,7 +121,7 @@ def get_by_session(session_id: int, db: Session = Depends(get_db)):
     summary="List all progress records",
     description="Returns every progress record in the system.",
 )
-def get_all(db: Session = Depends(get_db)):
+def get_all(_=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all progress records in the system.
 
     Args:
@@ -138,7 +139,7 @@ def get_all(db: Session = Depends(get_db)):
     summary="Get a progress record by id",
     description="Returns a single progress record identified by its primary key.",
 )
-def get_progress(progress_id: int, db: Session = Depends(get_db)):
+def get_progress(progress_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve one progress record by primary key.
 
     Args:
@@ -167,7 +168,7 @@ def get_progress(progress_id: int, db: Session = Depends(get_db)):
         "are not updatable — delete and recreate if the wrong references were used."
     ),
 )
-def update_progress(progress_id: int, data: ProgressUpdate, db: Session = Depends(get_db)):
+def update_progress(progress_id: int, data: ProgressUpdate, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Partially update a progress record.
 
     Args:
@@ -193,7 +194,7 @@ def update_progress(progress_id: int, data: ProgressUpdate, db: Session = Depend
     summary="Delete a progress record",
     description="Permanently removes a progress record from the database. Returns True on success.",
 )
-def delete_progress(progress_id: int, db: Session = Depends(get_db)):
+def delete_progress(progress_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Delete a progress record by primary key.
 
     Args:

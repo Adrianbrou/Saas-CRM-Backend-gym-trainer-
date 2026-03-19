@@ -26,6 +26,7 @@ from app.schemas.workout_session import (
     AttendanceCreate,
     AttendanceResponse,
 )
+from app.core.dependency import get_current_user, require_manager
 
 
 router = APIRouter(prefix="/workout-sessions", tags=["workout-sessions"])
@@ -41,7 +42,7 @@ router = APIRouter(prefix="/workout-sessions", tags=["workout-sessions"])
         "A trainer from another gym cannot lead a session."
     ),
 )
-def create_session(data: WorkoutSessionCreate, db: Session = Depends(get_db)):
+def create_session(data: WorkoutSessionCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Create a new workout session.
 
     Args:
@@ -66,7 +67,7 @@ def create_session(data: WorkoutSessionCreate, db: Session = Depends(get_db)):
     summary="List all sessions for a gym",
     description="Returns every workout session scheduled for the given gym. May return an empty list.",
 )
-def get_all(gym_id: int, db: Session = Depends(get_db)):
+def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all workout sessions for a specific gym.
 
     Args:
@@ -88,7 +89,7 @@ def get_all(gym_id: int, db: Session = Depends(get_db)):
         "Both the session and the member must already exist."
     ),
 )
-def add_member(session_id: int, data: AttendanceCreate, db: Session = Depends(get_db)):
+def add_member(session_id: int, data: AttendanceCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Add a member to a workout session.
 
     Args:
@@ -102,6 +103,9 @@ def add_member(session_id: int, data: AttendanceCreate, db: Session = Depends(ge
     Raises:
         HTTPException 400: If the session or member does not exist.
     """
+    if data.workout_session_id != session_id:
+        raise HTTPException(
+            status_code=400, detail="session_id in URL does not match body")
     try:
         return workout_session_service.add_member_to_session(db, data)
     except ValueError as e:
@@ -117,7 +121,7 @@ def add_member(session_id: int, data: AttendanceCreate, db: Session = Depends(ge
         "Returns True if removed, False if the member was not in the session."
     ),
 )
-def remove_member(session_id: int, member_id: int, db: Session = Depends(get_db)):
+def remove_member(session_id: int, member_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Remove a member from a workout session.
 
     Args:

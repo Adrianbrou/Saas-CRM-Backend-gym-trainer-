@@ -22,6 +22,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.services import member_service
 from app.schemas.member import MemberCreate, MemberResponse, MemberUpdate
+from app.core.dependency import get_current_user, require_manager
 
 
 router = APIRouter(prefix="/members", tags=["members"])
@@ -37,7 +38,7 @@ router = APIRouter(prefix="/members", tags=["members"])
         "but one gym cannot have two members with the same email."
     ),
 )
-def create_member(data: MemberCreate, db: Session = Depends(get_db)):
+def create_member(data: MemberCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Register a new gym member.
 
     Args:
@@ -62,7 +63,7 @@ def create_member(data: MemberCreate, db: Session = Depends(get_db)):
     summary="List all members in a gym",
     description="Returns every member belonging to the given gym. May return an empty list.",
 )
-def get_all(gym_id: int, db: Session = Depends(get_db)):
+def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all members for a specific gym.
 
     Args:
@@ -81,7 +82,7 @@ def get_all(gym_id: int, db: Session = Depends(get_db)):
     summary="Get a member by id",
     description="Returns a single member identified by their primary key.",
 )
-def get_member(member_id: int, db: Session = Depends(get_db)):
+def get_member(member_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve one member by primary key.
 
     Args:
@@ -109,7 +110,7 @@ def get_member(member_id: int, db: Session = Depends(get_db)):
         "gym_id cannot be changed — members cannot be reassigned to a different gym."
     ),
 )
-def update_member(member_id: int, data: MemberUpdate, db: Session = Depends(get_db)):
+def update_member(member_id: int, data: MemberUpdate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Partially update a member's fields.
 
     Args:
@@ -135,7 +136,7 @@ def update_member(member_id: int, data: MemberUpdate, db: Session = Depends(get_
     summary="Delete a member",
     description="Permanently removes a member from the database. Returns True on success.",
 )
-def delete_member(member_id: int, db: Session = Depends(get_db)):
+def delete_member(member_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Delete a member by primary key.
 
     Args:

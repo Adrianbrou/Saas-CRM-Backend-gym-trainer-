@@ -22,6 +22,7 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.schemas.gym import GymCreate, GymResponse, GymUpdate
 from app.services import gym_service
+from app.core.dependency import get_current_user, require_manager
 
 
 router = APIRouter(prefix="/gyms", tags=["gyms"])
@@ -62,7 +63,7 @@ def create_gym(data: GymCreate, db: Session = Depends(get_db)):
     summary="List all gyms",
     description="Returns every gym registered in the system. May return an empty list.",
 )
-def get_all_gym(db: Session = Depends(get_db)):
+def get_all_gym(_=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve all gyms in the system.
 
     Args:
@@ -80,7 +81,7 @@ def get_all_gym(db: Session = Depends(get_db)):
     summary="Get a gym by id",
     description="Returns a single gym identified by its primary key.",
 )
-def get_gym_id(gym_id: int, db: Session = Depends(get_db)):
+def get_gym_id(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Retrieve one gym by primary key.
 
     Args:
@@ -108,7 +109,7 @@ def get_gym_id(gym_id: int, db: Session = Depends(get_db)):
         "If updating name or location, the new name + location combination must remain unique."
     ),
 )
-def update_gym(data: GymUpdate, gym_id: int, db: Session = Depends(get_db)):
+def update_gym(data: GymUpdate, gym_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Partially update a gym's fields.
 
     Args:
@@ -137,7 +138,7 @@ def update_gym(data: GymUpdate, gym_id: int, db: Session = Depends(get_db)):
         "from the database via cascade delete. Returns True on success."
     ),
 )
-def delete(gym_id: int, db: Session = Depends(get_db)):
+def delete(gym_id: int, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Delete a gym by primary key.
 
     Args:
