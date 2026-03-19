@@ -15,6 +15,10 @@ Route summary:
 Error handling:
     ValueError from service layer → 400 Bad Request (not found or gym mismatch)
 """
+from fastapi import BackgroundTasks
+from app.core.email import send_session_notification
+from app.repository import member_repository, staff_repository, gym_repository, workout_session_repository
+
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -89,7 +93,7 @@ def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_
         "Both the session and the member must already exist."
     ),
 )
-def add_member(session_id: int, data: AttendanceCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
+def add_member(background_tasks: BackgroundTasks, session_id: int, data: AttendanceCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Add a member to a workout session.
 
     Args:
@@ -107,7 +111,17 @@ def add_member(session_id: int, data: AttendanceCreate, _=Depends(require_manage
         raise HTTPException(
             status_code=400, detail="session_id in URL does not match body")
     try:
-        return workout_session_service.add_member_to_session(db, data)
+        attendance = workout_session_service.add_member_to_session(db, data)
+        member = member_repository.get_by_id(db, data.member_id)
+        session = workout_session_repository.get_by_id(
+            db, data.workout_session_id)
+        trainer = staff_repository.get_by_id(
+            db, session.staff_id)  # type: ignore
+        gym = gym_repository.get_by_id(db, session.gym_id)  # type: ignore
+        background_tasks.add_task(send_session_notification, member.email, trainer.name,
+                                  member.name, gym.name, session.scheduled_at)  # type: ignore
+        return attendance
+
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
