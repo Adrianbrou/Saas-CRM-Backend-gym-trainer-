@@ -27,7 +27,7 @@ class Staff(Base):
     # foreign key from the gym
     gym_id = Column(Integer,
                     ForeignKey("gyms.id", ondelete="CASCADE"),
-                    nullable=False)
+                    nullable=False, index=True)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

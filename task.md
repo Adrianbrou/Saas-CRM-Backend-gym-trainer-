@@ -102,10 +102,10 @@
 
 ## PHASE 8 — Performance
 
-- [ ] Redis caching for gym stats/dashboard
-- [ ] Pagination on all list endpoints
-- [ ] Remove `echo=True` from engine for production
-- [ ] Query optimization review
+- [ ] Redis caching for gym stats/dashboard (deferred to Phase 10 — will use Docker)
+- [x] Pagination on all list endpoints
+- [x] Remove `echo=True` from engine for production
+- [x] Query optimization review
 
 ---
 
