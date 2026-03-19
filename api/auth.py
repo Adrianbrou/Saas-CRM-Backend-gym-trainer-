@@ -4,41 +4,34 @@ auth.py — Authentication Router
 Handles login for Staff (managers and trainers).
 On successful login, returns a signed JWT access token.
 
+Uses OAuth2PasswordRequestForm — the industry-standard OAuth2 form format.
+The client sends username (email) and password as form fields.
+Staff email is looked up globally across all gyms.
+
 The token payload contains:
     sub  — staff id (as string)
     role — staff role (manager or trainer)
     gym  — gym id the staff belongs to
 
-Login requires gym_id because email uniqueness is per-gym:
-the same email can exist in two different gyms.
-
 Route summary:
     POST /auth/login → verify credentials, return JWT token
 
 Error handling:
-    Invalid email or gym_id → 401 Unauthorized
-    Wrong password         → 401 Unauthorized
+    Email not found   → 401 Unauthorized
+    Wrong password    → 401 Unauthorized
+    No password set   → 401 Unauthorized
 """
-
+from fastapi.security import OAuth2PasswordRequestForm
 from typing import cast
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from app.database.session import get_db
 from app.repository import staff_repository
 from app.core.security import verify_password, create_access_token
 
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
-
-
-# --- Schemas (auth-specific, not shared with staff CRUD) ---
-
-class LoginRequest(BaseModel):
-    """Credentials the client must send to log in."""
-    email: EmailStr
-    gym_id: int
-    password: str
 
 
 class TokenResponse(BaseModel):
@@ -54,27 +47,28 @@ class TokenResponse(BaseModel):
     response_model=TokenResponse,
     summary="Staff login",
     description=(
-        "Authenticates a staff member using email, gym_id, and password. "
-        "Returns a JWT access token on success. "
-        "gym_id is required because the same email can exist in multiple gyms."
+        "Authenticates a staff member using email (sent as username) and password. "
+        "Uses OAuth2 password flow — compatible with Swagger Authorize and standard OAuth2 clients. "
+        "Returns a signed JWT access token valid for 30 minutes."
     ),
 )
-def login(data: LoginRequest, db: Session = Depends(get_db)):
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """Authenticate a staff member and return a JWT access token.
 
     Args:
-        data: LoginRequest schema — email, gym_id, password.
+        form_data: OAuth2PasswordRequestForm — username field used as email, plus password.
         db: Database session injected by FastAPI.
 
     Returns:
         TokenResponse: JWT access token and token type ("bearer").
 
     Raises:
-        HTTPException 401: If the email/gym_id does not match any staff,
-                           or if the password is incorrect.
+        HTTPException 401: If no staff with that email exists, if no password is set,
+                           or if the password does not match the stored hash.
     """
     # Step 1: Look up staff by email within the gym
-    staff = staff_repository.get_by_email(db, data.email, data.gym_id)
+    staff = staff_repository.get_by_email_global(db, form_data.username)
+
     if not staff:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -83,7 +77,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
 
     # Step 2: Verify the password against the stored hash
     hashed = cast(str | None, staff.hashed_password)
-    if not hashed or not verify_password(data.password, hashed):
+    if not hashed or not verify_password(form_data.password, hashed):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",

@@ -23,7 +23,8 @@ from app.database.session import get_db
 from app.services import member_service
 from app.schemas.member import MemberCreate, MemberResponse, MemberUpdate
 from app.core.dependency import get_current_user, require_manager
-
+from fastapi import BackgroundTasks
+from app.core.email import send_welcome_email
 
 router = APIRouter(prefix="/members", tags=["members"])
 
@@ -38,10 +39,13 @@ router = APIRouter(prefix="/members", tags=["members"])
         "but one gym cannot have two members with the same email."
     ),
 )
-def create_member(data: MemberCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
+def create_member(background_tasks: BackgroundTasks, data: MemberCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Register a new gym member.
 
     Args:
+
+
+        background_tasks: FastAPI BackgroundTasks — used to dispatch the welcome email after save.
         data: MemberCreate schema — gym_id, name, email, phone.
         db: Database session injected by FastAPI.
 
@@ -52,7 +56,10 @@ def create_member(data: MemberCreate, _=Depends(require_manager), db: Session = 
         HTTPException 400: If a member with that email already exists in the gym.
     """
     try:
-        return member_service.register_member(db, data)
+        member = member_service.register_member(db, data)
+        background_tasks.add_task(
+            send_welcome_email, data.email, data.name)
+        return member
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 

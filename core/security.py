@@ -21,8 +21,8 @@ from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-
-load_dotenv()
+from pathlib import Path
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
 
 # --- Config guards — fail fast at startup if .env is incomplete ---
 
@@ -32,7 +32,8 @@ if not ALGORITHM:
 
 SECRET_KEY = os.getenv("SECRET_KEY", "")
 if not SECRET_KEY:
-    raise ValueError("SECRET_KEY not found in .env — set it to a long random string")
+    raise ValueError(
+        "SECRET_KEY not found in .env — set it to a long random string")
 
 # CryptContext handles bcrypt hashing — .hash() and .verify()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -66,6 +66,10 @@ def get_by_email(db: Session, email: str, gym_id: int) -> Staff | None:
     return db.query(Staff).filter(Staff.email == email, Staff.gym_id == gym_id).first()
 
 
+def get_by_email_global(db: Session, email: str) -> Staff | None:
+    return db.query(Staff).filter(Staff.email == email).first()
+
+
 def update(db: Session, staff_id: int, updates: dict) -> Staff | None:
     """Update an existing staff member's fields using a dictionary of changes.
 
