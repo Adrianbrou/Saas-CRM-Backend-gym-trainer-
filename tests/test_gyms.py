@@ -16,3 +16,8 @@ def test_register_duplicate_gym(db):
 
     with pytest.raises(ValueError):
         gym_service.register_gym(db, data)
+
+
+def test_get_gym_not_found(db):
+    with pytest.raises(ValueError):
+        gym_service.get_gym(db, 9999)

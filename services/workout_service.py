@@ -6,7 +6,7 @@ A workout must be linked to an existing BodyPart (e.g. Chest, Legs).
 Workout names must be unique across the entire system.
 """
 
-from app.models.workout import Workout, BodyPart
+from app.models.workout import Workout
 from app.repository import workout_repository
 from app.schemas.workout import WorkoutCreate, WorkoutUpdate
 from sqlalchemy.orm import Session
