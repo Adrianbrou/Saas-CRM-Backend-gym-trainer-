@@ -19,6 +19,25 @@ jobs:
               mkdir -p /tmp/pyroot
               ln -s $GITHUB_WORKSPACE /tmp/pyroot/app
               echo "PYTHONPATH=/tmp/pyroot" >> $GITHUB_ENV
+          - name: Set env variables
+            env:
+              SECRET_KEY: ${{ secrets.SECRET_KEY }}
+              ALGORITHM: ${{ secrets.ALGORITHM }}
+              DATABASE_URL: ${{ secrets.DATABASE_URL }}
+              MAIL_HOST: ${{ secrets.MAIL_HOST }}
+              MAIL_PORT: ${{ secrets.MAIL_PORT }}
+              MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+              MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+              ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+            run: |
+              echo "SECRET_KEY=$SECRET_KEY" >> $GITHUB_ENV
+              echo "ALGORITHM=$ALGORITHM" >> $GITHUB_ENV
+              echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+              echo "MAIL_HOST=$MAIL_HOST" >> $GITHUB_ENV
+              echo "MAIL_PORT=$MAIL_PORT" >> $GITHUB_ENV
+              echo "MAIL_USERNAME=$MAIL_USERNAME" >> $GITHUB_ENV
+              echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> $GITHUB_ENV
+              echo "ACCESS_TOKEN_EXPIRE_MINUTES=$ACCESS_TOKEN_EXPIRE_MINUTES" >> $GITHUB_ENV
           - name: Run tests
             run: pytest tests/ -v
 
