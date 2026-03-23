@@ -13,12 +13,7 @@ jobs:
           - name: Install dependencies
             run: pip install -r requirements.txt
           - name: Check syntax
-            run: python -m py_compile main.py
-          - name: Set PYTHONPATH via symlink
-            run: |
-              mkdir -p /tmp/pyroot
-              ln -s $GITHUB_WORKSPACE /tmp/pyroot/app
-              echo "PYTHONPATH=/tmp/pyroot" >> $GITHUB_ENV
+            run: python -m py_compile app/main.py
           - name: Set env variables
             env:
               SECRET_KEY: ${{ secrets.SECRET_KEY }}

@@ -121,25 +121,30 @@
   - [x] test_progress.py — happy path, not found, empty list, update not found
 - [x] Alembic seed migration for BodyParts (9 body parts)
 - [x] pytest.ini with pythonpath = .
-- [x] Integration tests — IN PROGRESS
-  - [x] test_api_gyms.py — create, get, not found, duplicate, update, delete (5 tests)
-  - [ ] test_api_members.py
-  - [ ] test_api_staff.py
-  - [ ] test_api_workouts.py
-  - [ ] test_api_workout_sessions.py
-  - [ ] test_api_progress.py
-- [ ] Health check endpoint (`/health`)
+- [x] Integration tests — COMPLETE (32 tests across all 6 API files)
+  - [x] test_api_gyms.py — create, get, not found, duplicate, update, delete
+  - [x] test_api_members.py — create, get, not found, duplicate, update, delete
+  - [x] test_api_staff.py — create, get, not found, duplicate, update, delete
+  - [x] test_api_workouts.py — create, get, not found, duplicate, update, delete
+  - [x] test_api_workout_sessions.py — create, trainer not found, add/remove member
+  - [x] test_api_progress.py — log, get, not found, update, delete
+- [x] Fixed status codes — all GET/PATCH/DELETE not-found return 404 (was 400)
+- [x] Email errors silenced in tests (try/except in core/email.py)
+- [x] Health check endpoint (`/health`) — GET /health returns {"status": "ok"}, no auth
 
 ---
 
 ## PHASE 10 — Deployment
 
-- [ ] `Dockerfile`
-- [ ] `docker-compose.yml` (app + PostgreSQL + Redis)
-- [ ] Environment config for production
-- [x] GitHub Actions CI workflow (syntax check + 19 unit tests)
-  - [x] Symlink fix for PYTHONPATH (repo root = app folder)
-  - [x] All secrets injected via GitHub Secrets
+- [x] `Dockerfile`
+- [x] `docker-compose.yml` (app + PostgreSQL)
+- [x] Project restructure (source moved into app/ subfolder — PYTHONPATH fixed permanently)
+  - [x] Deleted root-level __init__.py
+  - [x] Updated load_dotenv paths in engine.py, email.py, security.py
+  - [x] Updated Dockerfile CMD and removed ENV PYTHONPATH
+  - [x] Updated CI — removed symlink step, fixed py_compile path
+  - [x] Updated migrations/env.py sys.path (3 levels → 2 levels)
+  - [x] 52/52 tests passing after restructure
+- [ ] Redis caching (app + PostgreSQL + Redis in docker-compose)
 - [ ] Full CI/CD pipeline (deploy on green)
 - [ ] Deploy to cloud (AWS / GCP / Azure)
-- [ ] Project restructure (move source into app/ subfolder — fixes PYTHONPATH permanently)

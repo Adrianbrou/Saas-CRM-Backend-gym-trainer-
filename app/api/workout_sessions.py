@@ -120,7 +120,7 @@ def add_member(background_tasks: BackgroundTasks, session_id: int, data: Attenda
         trainer = staff_repository.get_by_id(
             db, session.staff_id)  # type: ignore
         gym = gym_repository.get_by_id(db, session.gym_id)  # type: ignore
-        background_tasks.add_task(send_session_notification, member.email, trainer.name,
+        background_tasks.add_task(send_session_notification, member.email, trainer.name,  # type: ignore
                                   member.name, gym.name, session.scheduled_at)  # type: ignore
         return attendance
 

@@ -20,7 +20,7 @@ from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
 from pathlib import Path
 
-load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent / ".env")
+load_dotenv(dotenv_path=Path(__file__).resolve().parent.parent.parent / ".env")
 
 MAIL_HOST = os.getenv("MAIL_HOST", "")
 MAIL_PORT = int(os.getenv("MAIL_PORT", "2525"))
