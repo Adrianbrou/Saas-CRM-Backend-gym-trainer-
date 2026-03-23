@@ -113,7 +113,7 @@ def get_member(member_id: int, _=Depends(get_current_user), db: Session = Depend
     try:
         return member_service.get_member(db, member_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.patch(
@@ -142,7 +142,7 @@ def update_member(member_id: int, data: MemberUpdate, _=Depends(require_manager)
     try:
         return member_service.update_member(db, member_id, data)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.delete(
@@ -167,4 +167,4 @@ def delete_member(member_id: int, _=Depends(require_manager), db: Session = Depe
     try:
         return member_service.delete_member(db, member_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))

@@ -100,7 +100,7 @@ def get_staff(staff_id: int, _=Depends(get_current_user), db: Session = Depends(
     try:
         return staff_service.get_staff(db, staff_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.patch(
@@ -129,7 +129,7 @@ def update_staff(staff_id: int, data: StaffUpdate, _=Depends(require_manager), d
     try:
         return staff_service.update_staff(db, staff_id, data)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.delete(
@@ -154,4 +154,4 @@ def delete_staff(staff_id: int, _=Depends(require_manager), db: Session = Depend
     try:
         return staff_service.delete_staff(db, staff_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))

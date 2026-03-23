@@ -99,7 +99,7 @@ def get_workout(workout_id: int, _=Depends(get_current_user), db: Session = Depe
     try:
         return workout_service.get_workout(db, workout_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.patch(
@@ -125,7 +125,7 @@ def update_workout(workout_id: int, data: WorkoutUpdate, _=Depends(require_manag
     try:
         return workout_service.update_workout(db, workout_id, data)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.delete(
@@ -150,4 +150,4 @@ def delete_workout(workout_id: int, _=Depends(require_manager), db: Session = De
     try:
         return workout_service.delete_workout(db, workout_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))

@@ -163,7 +163,7 @@ def get_progress(progress_id: int, _=Depends(get_current_user), db: Session = De
     try:
         return progress_service.get_progress(db, progress_id)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.patch(
@@ -193,7 +193,7 @@ def update_progress(progress_id: int, data: ProgressUpdate, _=Depends(get_curren
     try:
         return progress_service.update_progress(db, progress_id, data)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.delete(
@@ -219,4 +219,4 @@ def delete_progress(progress_id: int, _=Depends(get_current_user), db: Session =
         progress_service.delete_progress(db, progress_id)
         return True
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=404, detail=str(e))

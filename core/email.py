@@ -54,10 +54,13 @@ def send_welcome_email(to_email: str, member_name: str) -> None:
     body = f"Hi {member_name}, Welcome to anytime fitness, we are excited to help you through your fitness journey. Enjoy!!"
     message.attach(MIMEText(body, "plain"))
 
-    with smtplib.SMTP(MAIL_HOST, MAIL_PORT) as server:
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(message["From"], to_email, message.as_string())
+    try:
+        with smtplib.SMTP(MAIL_HOST, MAIL_PORT) as server:
+            server.starttls()
+            server.login(MAIL_USERNAME, MAIL_PASSWORD)
+            server.sendmail(message["From"], to_email, message.as_string())
+    except Exception:
+        pass  # Email failures are non-critical — never crash the app
 
 
 def send_session_notification(to_email: str, trainer: str, member_name: str, gym_name: str, schedule_at: datetime) -> None:
@@ -94,7 +97,10 @@ def send_session_notification(to_email: str, trainer: str, member_name: str, gym
     Location :{gym_name} """
     message.attach(MIMEText(body, "plain"))
 
-    with smtplib.SMTP(MAIL_HOST, MAIL_PORT) as server:
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(message["From"], to_email, message.as_string())
+    try:
+        with smtplib.SMTP(MAIL_HOST, MAIL_PORT) as server:
+            server.starttls()
+            server.login(MAIL_USERNAME, MAIL_PASSWORD)
+            server.sendmail(message["From"], to_email, message.as_string())
+    except Exception:
+        pass  # Email failures are non-critical — never crash the app
