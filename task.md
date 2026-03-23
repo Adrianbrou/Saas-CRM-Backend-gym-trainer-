@@ -121,7 +121,13 @@
   - [x] test_progress.py — happy path, not found, empty list, update not found
 - [x] Alembic seed migration for BodyParts (9 body parts)
 - [x] pytest.ini with pythonpath = .
-- [ ] Integration tests for each API endpoint
+- [x] Integration tests — IN PROGRESS
+  - [x] test_api_gyms.py — create, get, not found, duplicate, update, delete (5 tests)
+  - [ ] test_api_members.py
+  - [ ] test_api_staff.py
+  - [ ] test_api_workouts.py
+  - [ ] test_api_workout_sessions.py
+  - [ ] test_api_progress.py
 - [ ] Health check endpoint (`/health`)
 
 ---

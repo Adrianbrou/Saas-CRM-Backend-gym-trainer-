@@ -93,7 +93,7 @@ def get_all(gym_id: int, _=Depends(get_current_user), db: Session = Depends(get_
     description=(
         "Registers a member as attending a workout session. "
         "Both the session and the member must already exist."
-    ),
+    ), status_code=201,
 )
 def add_member(background_tasks: BackgroundTasks, session_id: int, data: AttendanceCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Add a member to a workout session.
