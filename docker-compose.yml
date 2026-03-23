@@ -18,3 +18,8 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/crm_db
     depends_on:
       - db
+
+  cache:
+    image: redis:7
+    ports:
+      - "6379:6379"

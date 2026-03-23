@@ -146,5 +146,10 @@
   - [x] Updated migrations/env.py sys.path (3 levels → 2 levels)
   - [x] 52/52 tests passing after restructure
 - [ ] Redis caching (app + PostgreSQL + Redis in docker-compose)
+  - [x] Redis service added to docker-compose.yml
+  - [x] redis package added to requirements.txt
+  - [x] app/core/cache.py created (redis_client setup pending)
+  - [ ] Add redis_client connection in cache.py
+  - [ ] Add caching to gym_service (get + invalidate on update/delete)
 - [ ] Full CI/CD pipeline (deploy on green)
 - [ ] Deploy to cloud (AWS / GCP / Azure)
