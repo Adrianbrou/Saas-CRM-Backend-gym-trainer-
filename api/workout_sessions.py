@@ -44,7 +44,7 @@ router = APIRouter(prefix="/workout-sessions", tags=["workout-sessions"])
         "Creates a new workout session for a gym. "
         "The assigned trainer (staff_id) must belong to the same gym as the session. "
         "A trainer from another gym cannot lead a session."
-    ),
+    ), status_code=201,
 )
 def create_session(data: WorkoutSessionCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Create a new workout session.

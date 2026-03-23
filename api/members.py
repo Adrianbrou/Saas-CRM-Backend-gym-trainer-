@@ -42,7 +42,7 @@ router = APIRouter(prefix="/members", tags=["members"])
         "Creates a new member linked to the specified gym. "
         "Email must be unique within the gym — two gyms can share an email, "
         "but one gym cannot have two members with the same email."
-    ),
+    ), status_code=201,
 )
 def create_member(background_tasks: BackgroundTasks, data: MemberCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Register a new gym member.

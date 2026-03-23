@@ -36,7 +36,7 @@ router = APIRouter(prefix="/staff", tags=["staff"])
         "Role Can be only 'manager' or 'trainer'"
         "Email must be unique within the gym — two gyms can share an email, "
         "but one gym cannot have two staff members with the same email."
-    ),
+    ), status_code=201,
 )
 def create_staff(data: StaffCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Register a new staff member.

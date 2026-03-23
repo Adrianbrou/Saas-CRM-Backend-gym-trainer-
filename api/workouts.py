@@ -36,7 +36,7 @@ router = APIRouter(prefix="/workouts", tags=["workouts"])
         "Creates a new workout linked to an existing body part. "
         "Workout names must be unique across the entire system — "
         "workouts are shared between all gyms, not scoped per gym."
-    ),
+    ), status_code=201,
 )
 def create_workout(data: WorkoutCreate, _=Depends(require_manager), db: Session = Depends(get_db)):
     """Create a new workout.

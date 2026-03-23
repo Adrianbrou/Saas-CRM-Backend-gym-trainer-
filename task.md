@@ -111,8 +111,16 @@
 
 ## PHASE 9 — Testing
 
-- [ ] Setup pytest + test database
-- [ ] Unit tests for each service
+- [x] Setup pytest + test database (SQLite in-memory via conftest.py)
+- [x] Unit tests for each service (19 tests, all passing)
+  - [x] test_gyms.py — happy path, duplicate, not found
+  - [x] test_members.py — happy path, duplicate, not found
+  - [x] test_staff.py — happy path, duplicate, not found (verify_password)
+  - [x] test_workout.py — happy path, duplicate, not found (BodyPart seed)
+  - [x] test_workout_session.py — happy path, trainer not found, member not found
+  - [x] test_progress.py — happy path, not found, empty list, update not found
+- [x] Alembic seed migration for BodyParts (9 body parts)
+- [x] pytest.ini with pythonpath = .
 - [ ] Integration tests for each API endpoint
 - [ ] Health check endpoint (`/health`)
 
@@ -123,5 +131,9 @@
 - [ ] `Dockerfile`
 - [ ] `docker-compose.yml` (app + PostgreSQL + Redis)
 - [ ] Environment config for production
-- [ ] GitHub Actions CI/CD pipeline
+- [x] GitHub Actions CI workflow (syntax check + 19 unit tests)
+  - [x] Symlink fix for PYTHONPATH (repo root = app folder)
+  - [x] All secrets injected via GitHub Secrets
+- [ ] Full CI/CD pipeline (deploy on green)
 - [ ] Deploy to cloud (AWS / GCP / Azure)
+- [ ] Project restructure (move source into app/ subfolder — fixes PYTHONPATH permanently)

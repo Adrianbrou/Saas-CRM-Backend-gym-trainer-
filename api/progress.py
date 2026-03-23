@@ -39,7 +39,7 @@ router = APIRouter(prefix="/progress", tags=["progress"])
         "Creates a progress record linking a member's performance to a specific "
         "workout and session. All three foreign keys (member_id, workout_id, "
         "workout_session_id) are required."
-    ),
+    ), status_code=201,
 )
 def log_progress(data: ProgressCreate, _=Depends(get_current_user), db: Session = Depends(get_db)):
     """Log a new progress record for a member.

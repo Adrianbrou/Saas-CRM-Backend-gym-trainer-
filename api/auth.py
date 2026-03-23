@@ -54,7 +54,7 @@ class TokenResponse(BaseModel):
         "Authenticates a staff member using email (sent as username) and password. "
         "Uses OAuth2 password flow — compatible with Swagger Authorize and standard OAuth2 clients. "
         "Returns a signed JWT access token valid for 30 minutes."
-    ),
+    ), status_code=201,
 )
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """Authenticate a staff member and return a JWT access token.

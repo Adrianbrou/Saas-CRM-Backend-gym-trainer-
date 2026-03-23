@@ -37,6 +37,7 @@ router = APIRouter(prefix="/gyms", tags=["gyms"])
         "The combination of name + location must be unique — "
         "two gyms with the same name can exist as long as they are in different locations."
     ),
+    status_code=201,
 )
 def create_gym(data: GymCreate, db: Session = Depends(get_db)):
     """Register a new gym.
@@ -62,6 +63,7 @@ def create_gym(data: GymCreate, db: Session = Depends(get_db)):
     response_model=list[GymResponse],
     summary="List all gyms",
     description="Returns every gym registered in the system. May return an empty list.",
+    status_code=200,
 )
 def get_all_gym(_=Depends(get_current_user), db: Session = Depends(get_db), skip: int = 0, limit: int = 20):
     """Retrieve all gyms in the system.
