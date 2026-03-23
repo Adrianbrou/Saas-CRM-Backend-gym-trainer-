@@ -1,3 +1,9 @@
+def test_health_check(client):
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+
+
 def test_api_get_gym(auth_client):
     created = auth_client.post(
         "/gyms/", json={"name": "Gym2", "location": "City2"})

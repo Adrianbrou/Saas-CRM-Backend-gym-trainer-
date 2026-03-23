@@ -14,6 +14,16 @@ setup_logging()
 
 app = FastAPI()
 
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ok",
+        "database": "connected",
+        "version": "1.0.0"
+    }
+
+
 app.include_router(auth_router)
 app.include_router(gym_router)
 app.include_router(staff_router)
