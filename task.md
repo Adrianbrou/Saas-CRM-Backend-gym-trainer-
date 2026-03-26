@@ -102,7 +102,7 @@
 
 ## PHASE 8 — Performance
 
-- [ ] Redis caching for gym stats/dashboard (deferred to Phase 10 — will use Docker)
+- [x] Redis caching (completed in Phase 10)
 - [x] Pagination on all list endpoints
 - [x] Remove `echo=True` from engine for production
 - [x] Query optimization review
@@ -145,11 +145,15 @@
   - [x] Updated CI — removed symlink step, fixed py_compile path
   - [x] Updated migrations/env.py sys.path (3 levels → 2 levels)
   - [x] 52/52 tests passing after restructure
-- [ ] Redis caching (app + PostgreSQL + Redis in docker-compose)
-  - [x] Redis service added to docker-compose.yml
+- [x] Redis caching — COMPLETE
+  - [x] Redis service added to docker-compose.yml (cache service, port 6379)
   - [x] redis package added to requirements.txt
-  - [x] app/core/cache.py created (redis_client setup pending)
-  - [ ] Add redis_client connection in cache.py
-  - [ ] Add caching to gym_service (get + invalidate on update/delete)
+  - [x] app/core/cache.py — redis_client with REDIS_HOST env var (default localhost)
+  - [x] Caching added to gym, member, staff, workout, progress services
+  - [x] Pattern: cache get_by_id, invalidate on update/delete
+  - [x] Cache key format: resource:{id} (e.g. gym:1, member:5)
+  - [x] TTL: 300 seconds (5 min)
+  - [x] REDIS_HOST: cache injected via docker-compose, localhost default for local dev
+  - [x] Tests require Redis running: docker-compose up cache -d
 - [ ] Full CI/CD pipeline (deploy on green)
 - [ ] Deploy to cloud (AWS / GCP / Azure)
