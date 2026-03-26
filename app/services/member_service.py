@@ -8,8 +8,10 @@ but not two members at the same gym.
 
 from app.models.member import Member
 from app.repository import member_repository
-from app.schemas.member import MemberCreate, MemberUpdate
+from app.schemas.member import MemberCreate, MemberUpdate, MemberResponse
 from sqlalchemy.orm import Session
+from app.core import cache
+import json
 
 
 def register_member(db: Session, data: MemberCreate) -> Member:
@@ -50,7 +52,9 @@ def update_member(db: Session, member_id: int, data: MemberUpdate) -> Member:
     if not existing:
         raise ValueError("Member not found")
     updates = data.model_dump(exclude_unset=True)
-    return member_repository.update(db, member_id, updates)
+    result = member_repository.update(db, member_id, updates)
+    cache.redis_client.delete(f"member:{member_id}")
+    return result
 
 
 def get_all(db: Session, gym_id: int, skip: int = 0, limit: int = 20) -> list[Member]:
@@ -81,9 +85,18 @@ def get_member(db: Session, member_id: int) -> Member:
     Returns:
         Member: The matching member object.
     """
+    # check if there is an existing cache
+    cached = cache.redis_client.get(f"member:{member_id}")
+    if cached and isinstance(cached, str):
+        return json.loads(cached)
+
     existing = member_repository.get_by_id(db, member_id)
+
     if not existing:
         raise ValueError("Member not found")
+    # save temporarly to cache
+    cache.redis_client.set(f"member:{member_id}", json.dumps(
+        MemberResponse.model_validate(existing).model_dump(mode="json")), ex=300)
     return existing
 
 
@@ -104,4 +117,5 @@ def delete_member(db: Session, member_id: int) -> bool:
     if not existing:
         raise ValueError("Member not found")
     member_repository.delete(db, member_id)
+    cache.redis_client.delete(f"member:{member_id}")
     return True

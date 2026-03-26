@@ -8,9 +8,11 @@ but not two staff at the same gym.
 
 from app.models.staff import Staff
 from app.repository import staff_repository
-from app.schemas.staff import StaffCreate, StaffUpdate
+from app.schemas.staff import StaffCreate, StaffUpdate, StaffResponse
 from app.core import security
 from sqlalchemy.orm import Session
+from app.core import cache
+import json
 
 
 def register_staff(db: Session, data: StaffCreate) -> Staff:
@@ -54,8 +56,10 @@ def update_staff(db: Session, staff_id: int, data: StaffUpdate) -> Staff:
     if not existing:
         raise ValueError("Staff not found")
     updates = data.model_dump(exclude_unset=True)
+    result = staff_repository.update(db, staff_id, updates)
+    cache.redis_client.delete(f"staff:{staff_id}")
 
-    return staff_repository.update(db, staff_id, updates)
+    return result
 
 
 def get_staff(db: Session, staff_id: int) -> Staff:
@@ -71,9 +75,14 @@ def get_staff(db: Session, staff_id: int) -> Staff:
     Returns:
         Staff: The matching staff member object.
     """
+    cached = cache.redis_client.get(f"staff:{staff_id}")
+    if cached and isinstance(cached, str):
+        return json.loads(cached)
     existing = staff_repository.get_by_id(db, staff_id)
     if not existing:
         raise ValueError("Staff not found")
+    cache.redis_client.set(f"staff:{staff_id}", json.dumps(
+        StaffResponse.model_validate(existing).model_dump(mode="json")), ex=300)
     return existing
 
 
@@ -109,4 +118,5 @@ def delete_staff(db: Session, staff_id: int) -> bool:
     if not existing:
         raise ValueError("Staff not found")
     staff_repository.delete(db, staff_id)
+    cache.redis_client.delete(f"staff:{staff_id}")
     return True

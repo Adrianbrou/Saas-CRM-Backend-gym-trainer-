@@ -15,8 +15,10 @@ FLOW:
 
 from app.repository import gym_repository
 from app.models.gym import Gym
-from app.schemas.gym import GymCreate, GymUpdate
+from app.schemas.gym import GymCreate, GymUpdate, GymResponse
 from sqlalchemy.orm import Session
+from app.core import cache
+import json
 
 
 def register_gym(db: Session, data: GymCreate) -> Gym:
@@ -100,7 +102,10 @@ def update_gym(db: Session, gym_id: int, data: GymUpdate) -> Gym:
     updates = data.model_dump(exclude_unset=True)
 
     # Step 3: Delegate the actual DB update to the repository
-    return gym_repository.update(db, gym_id, updates)
+    result = gym_repository.update(db, gym_id, updates)
+    cache.redis_client.delete(f"gym:{gym_id}")
+
+    return result
 
 
 def get_gym(db: Session, gym_id: int) -> Gym:
@@ -116,9 +121,20 @@ def get_gym(db: Session, gym_id: int) -> Gym:
     Returns:
         Gym: if existing return the gym info through it's id
     """
+
+    # check cache
+    cached = cache.redis_client.get(f"gym:{gym_id}")
+    if cached and isinstance(cached, str):
+        return json.loads(cached)
+
+    # if not cache
     existing = gym_repository.get_by_id(db, gym_id)
     if not existing:
         raise ValueError("Gym not found")
+    # save temporarly to cache
+    cache.redis_client.set(f"gym:{gym_id}", json.dumps(
+        GymResponse.model_validate(existing).model_dump(mode="json")), ex=300)
+
     return existing
 
 
@@ -153,4 +169,6 @@ def delete_gym(db: Session, gym_id: int) -> bool:
     if not existing:
         raise ValueError("Gym not found")
     gym_repository.delete(db, gym_id)
+    cache.redis_client.delete(f"gym:{gym_id}")
+
     return True

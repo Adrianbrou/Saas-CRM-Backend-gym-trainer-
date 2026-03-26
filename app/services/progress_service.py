@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
 from app.repository import progress_repository
 from app.models.progress import Progress
-from app.schemas.progress import ProgressCreate, ProgressUpdate
+from app.schemas.progress import ProgressCreate, ProgressUpdate, ProgressResponse
+from app.core import cache
+import json
 
 
 def log_progress(db: Session, data: ProgressCreate) -> Progress:
@@ -31,9 +33,16 @@ def get_progress(db: Session, progress_id: int) -> Progress:
     Raises:
         ValueError: If no record exists with the given ID.
     """
+    # check the cache
+    cached = cache.redis_client.get(f"progress:{progress_id}")
+    if cached and isinstance(cached, str):
+        return json.loads(cached)
+
     progress = progress_repository.get_by_id(db, progress_id)
     if not progress:
         raise ValueError(f"Progress record {progress_id} not found.")
+    cache.redis_client.set(f"progress:{progress_id}", json.dumps(
+        ProgressResponse.model_validate(progress).model_dump(mode="json")), ex=300)
     return progress
 
 
@@ -69,7 +78,9 @@ def update_progress(db: Session, progress_id: int, data: ProgressUpdate) -> Prog
     if not progress:
         raise ValueError(f"Progress record {progress_id} not found.")
     updates = data.model_dump(exclude_unset=True)
-    return progress_repository.update(db, progress_id, updates)
+    result = progress_repository.update(db, progress_id, updates)
+    cache.redis_client.delete(f"progress:{progress_id}")
+    return result
 
 
 def delete_progress(db: Session, progress_id: int) -> None:
@@ -85,6 +96,7 @@ def delete_progress(db: Session, progress_id: int) -> None:
     deleted = progress_repository.delete(db, progress_id)
     if not deleted:
         raise ValueError(f"Progress record {progress_id} not found.")
+    cache.redis_client.delete(f"progress:{progress_id}")
 
 
 def get_progress_by_member(db: Session, member_id: int, skip: int = 0, limit: int = 20) -> list[Progress]:

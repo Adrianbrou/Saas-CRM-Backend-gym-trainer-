@@ -8,8 +8,10 @@ Workout names must be unique across the entire system.
 
 from app.models.workout import Workout
 from app.repository import workout_repository
-from app.schemas.workout import WorkoutCreate, WorkoutUpdate
+from app.schemas.workout import WorkoutCreate, WorkoutUpdate, WorkoutResponse
 from sqlalchemy.orm import Session
+from app.core import cache
+import json
 
 
 def create_workout(db: Session, data: WorkoutCreate) -> Workout:
@@ -50,9 +52,16 @@ def get_workout(db: Session, workout_id: int) -> Workout:
     Returns:
         The matching Workout object.
     """
+    # check if cached
+    cached = cache.redis_client.get(f"workout:{workout_id}")
+    if cached and isinstance(cached, str):
+        return json.loads(cached)
+
     existing = workout_repository.get_by_id(db, workout_id)
     if not existing:
         raise ValueError("Workout not found")
+    cache.redis_client.set(f"workout:{workout_id}", json.dumps(
+        WorkoutResponse.model_validate(existing).model_dump(mode="json")), ex=300)
     return existing
 
 
@@ -90,7 +99,9 @@ def update_workout(db: Session, workout_id: int, data: WorkoutUpdate) -> Workout
 
     # Only update fields the client actually sent
     updates = data.model_dump(exclude_unset=True)
-    return workout_repository.update(db, workout_id, updates)
+    result = workout_repository.update(db, workout_id, updates)
+    cache.redis_client.delete(f"workout:{workout_id}")
+    return result
 
 
 def delete_workout(db: Session, workout_id: int) -> bool:
@@ -109,4 +120,6 @@ def delete_workout(db: Session, workout_id: int) -> bool:
     existing = workout_repository.get_by_id(db, workout_id)
     if not existing:
         raise ValueError("Workout not found")
-    return workout_repository.delete(db, workout_id)
+    workout_repository.delete(db, workout_id)
+    cache.redis_client.delete(f"workout:{workout_id}")
+    return True
