@@ -34,7 +34,9 @@ step.md
 PROJECT_STRUCTURE.md
 ABOUT.md
 AGENTS.md
+AWS.md
 .claude/
+.beads/
 
 # =============================================================
 # BUILD / PACKAGING — generated when running pip install -e .

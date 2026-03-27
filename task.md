@@ -155,5 +155,19 @@
   - [x] TTL: 300 seconds (5 min)
   - [x] REDIS_HOST: cache injected via docker-compose, localhost default for local dev
   - [x] Tests require Redis running: docker-compose up cache -d
+- [ ] AWS Deployment — IN PROGRESS
+  - [x] AWS account created
+  - [x] IAM user adrian_coding created — AdministratorAccess policy
+  - [x] Access keys created + AWS CLI configured (us-east-1)
+  - [x] ECR repository created: 078558209271.dkr.ecr.us-east-1.amazonaws.com/crm-backend
+  - [x] Docker image built, tagged, pushed to ECR
+  - [x] RDS PostgreSQL created: crm-db.csveqsqwg4s4.us-east-1.rds.amazonaws.com
+  - [x] Secrets Manager: crm-backend/prod (all .env variables stored)
+  - [x] ECS cluster created: crm-cluster (Fargate)
+  - [x] ECS task definition created: crm-backend-task (port 8000)
+  - [x] ECS service created: crm-backend-service (desired tasks: 1, public IP on)
+  - [ ] Add env vars to task definition (pull from Secrets Manager)
+  - [ ] Run Alembic migrations on RDS
+  - [ ] Test live endpoint
+  - [ ] Wire GitHub Actions CI/CD (auto-deploy on green)
 - [ ] Full CI/CD pipeline (deploy on green)
-- [ ] Deploy to cloud (AWS / GCP / Azure)
